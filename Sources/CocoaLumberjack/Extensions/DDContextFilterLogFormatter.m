@@ -68,7 +68,7 @@
     return [_contextSet isInSet:loggingContext];
 }
 
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage {
     if ([self isOnWhitelist:logMessage->_context]) {
         return logMessage->_message;
     } else {
@@ -115,7 +115,7 @@
     return [_contextSet isInSet:loggingContext];
 }
 
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage {
     if ([self isOnBlacklist:logMessage->_context]) {
         return nil;
     } else {

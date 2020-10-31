@@ -16,12 +16,12 @@
 /**
  * Legacy macros used for 1.9.x backwards compatibility.
  *
- * Imported by default when importing a DDLog.h directly and DD_LEGACY_MACROS is not defined and set to 0.
+ * Imported by default when importing a DDLog.h directly and MSDD_LEGACY_MACROS is not defined and set to 0.
  **/
-#if DD_LEGACY_MACROS
+#if MSDD_LEGACY_MACROS
 
 #warning CocoaLumberjack 1.9.x legacy macros enabled. \
-Disable legacy macros by importing CocoaLumberjack.h or DDLogMacros.h instead of DDLog.h or add `#define DD_LEGACY_MACROS 0` before importing DDLog.h.
+Disable legacy macros by importing CocoaLumberjack.h or DDLogMacros.h instead of MSDDLog.h or add `#define MSDD_LEGACY_MACROS 0` before importing MSDDLog.h.
 
 #ifndef LOG_LEVEL_DEF
     #define LOG_LEVEL_DEF ddLogLevel

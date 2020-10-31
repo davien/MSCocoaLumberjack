@@ -16,11 +16,11 @@
 #import <Foundation/Foundation.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,22 +28,22 @@ NS_ASSUME_NONNULL_BEGIN
  * This formatter can be used to chain different formatters together.
  * The log message will processed in the order of the formatters added.
  **/
-@interface DDMultiFormatter : NSObject <DDLogFormatter>
+@interface DDMultiFormatter : NSObject <MSDDLogFormatter>
 
 /**
  *  Array of chained formatters
  */
-@property (nonatomic, readonly) NSArray<id<DDLogFormatter>> *formatters;
+@property (nonatomic, readonly) NSArray<id<MSDDLogFormatter>> *formatters;
 
 /**
  *  Add a new formatter
  */
-- (void)addFormatter:(id<DDLogFormatter>)formatter NS_SWIFT_NAME(add(_:));
+- (void)addFormatter:(id<MSDDLogFormatter>)formatter NS_SWIFT_NAME(add(_:));
 
 /**
  *  Remove a formatter
  */
-- (void)removeFormatter:(id<DDLogFormatter>)formatter NS_SWIFT_NAME(remove(_:));
+- (void)removeFormatter:(id<MSDDLogFormatter>)formatter NS_SWIFT_NAME(remove(_:));
 
 /**
  *  Remove all existing formatters
@@ -53,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Check if a certain formatter is used
  */
-- (BOOL)isFormattingWithFormatter:(id<DDLogFormatter>)formatter;
+- (BOOL)isFormattingWithFormatter:(id<MSDDLogFormatter>)formatter;
 
 @end
 

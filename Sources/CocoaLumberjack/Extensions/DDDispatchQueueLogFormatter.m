@@ -131,7 +131,7 @@ static DDQualityOfServiceName _qos_name(NSUInteger qos) {
     return [_dateFormatter stringFromDate:date];
 }
 
-- (NSString *)queueThreadLabelForLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)queueThreadLabelForLogMessage:(MSDDLogMessage *)logMessage {
     // As per the DDLogFormatter contract, this method is always invoked on the same thread/dispatch_queue
 
     NSUInteger minQueueLength = self.minQueueLength;
@@ -224,7 +224,7 @@ static DDQualityOfServiceName _qos_name(NSUInteger qos) {
     }
 }
 
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage {
     NSString *timestamp = [self stringFromDate:(logMessage->_timestamp)];
     NSString *queueThreadLabel = [self queueThreadLabelForLogMessage:logMessage];
 

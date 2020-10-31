@@ -23,12 +23,12 @@
 #import <CocoaLumberjack/DDASLLogCapture.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
 static BOOL _cancel = YES;
-static DDLogLevel _captureLevel = DDLogLevelVerbose;
+static MSDDLogLevel _captureLevel = MSDDLogLevelVerbose;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
@@ -52,11 +52,11 @@ static DDLogLevel _captureLevel = DDLogLevelVerbose;
     _cancel = YES;
 }
 
-+ (DDLogLevel)captureLevel {
++ (MSDDLogLevel)captureLevel {
     return _captureLevel;
 }
 
-+ (void)setCaptureLevel:(DDLogLevel)level {
++ (void)setCaptureLevel:(MSDDLogLevel)level {
     _captureLevel = level;
 }
 
@@ -83,7 +83,7 @@ static DDLogLevel _captureLevel = DDLogLevelVerbose;
     if ( messageCString == NULL )
         return;
 
-    DDLogFlag flag;
+    MSDDLogFlag flag;
     BOOL async;
 
     const char* levelCString = asl_get(msg, ASL_KEY_LEVEL);
@@ -91,13 +91,13 @@ static DDLogLevel _captureLevel = DDLogLevelVerbose;
         // By default all NSLog's with a ASL_LEVEL_WARNING level
         case ASL_LEVEL_EMERG    :
         case ASL_LEVEL_ALERT    :
-        case ASL_LEVEL_CRIT     : flag = DDLogFlagError;    async = NO;  break;
-        case ASL_LEVEL_ERR      : flag = DDLogFlagWarning;  async = YES; break;
-        case ASL_LEVEL_WARNING  : flag = DDLogFlagInfo;     async = YES; break;
-        case ASL_LEVEL_NOTICE   : flag = DDLogFlagDebug;    async = YES; break;
+        case ASL_LEVEL_CRIT     : flag = MSDDLogFlagError;    async = NO;  break;
+        case ASL_LEVEL_ERR      : flag = MSDDLogFlagWarning;  async = YES; break;
+        case ASL_LEVEL_WARNING  : flag = MSDDLogFlagInfo;     async = YES; break;
+        case ASL_LEVEL_NOTICE   : flag = MSDDLogFlagDebug;    async = YES; break;
         case ASL_LEVEL_INFO     :
         case ASL_LEVEL_DEBUG    :
-        default                 : flag = DDLogFlagVerbose;  async = YES;  break;
+        default                 : flag = MSDDLogFlagVerbose;  async = YES;  break;
     }
 
     if (!(_captureLevel & flag)) {
@@ -115,7 +115,7 @@ static DDLogLevel _captureLevel = DDLogLevelVerbose;
 
     NSDate *timeStamp = [NSDate dateWithTimeIntervalSince1970:totalSeconds];
 
-    DDLogMessage *logMessage = [[DDLogMessage alloc] initWithMessage:message
+    MSDDLogMessage *logMessage = [[MSDDLogMessage alloc] initWithMessage:message
                                                                level:_captureLevel
                                                                 flag:flag
                                                              context:0
@@ -126,7 +126,7 @@ static DDLogLevel _captureLevel = DDLogLevelVerbose;
                                                              options:0
                                                            timestamp:timeStamp];
     
-    [DDLog log:async message:logMessage];
+    [MSDDLog log:async message:logMessage];
 }
 
 + (void)captureAslLogs {

@@ -14,11 +14,11 @@
 //   prior written permission of Deusty, LLC.
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 @class DDLogFileInfo;
 
@@ -308,7 +308,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  * In addition to the convenience of having a logical default formatter,
  * it will also provide a template that makes it easy for developers to copy and change.
  **/
-@interface DDLogFileFormatterDefault : NSObject <DDLogFormatter>
+@interface DDLogFileFormatterDefault : NSObject <MSDDLogFormatter>
 
 /**
  *  Default initializer
@@ -329,7 +329,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
 /**
  *  The standard implementation for a file logger
  */
-@interface DDFileLogger : DDAbstractLogger <DDLogger>
+@interface DDFileLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Default initializer.

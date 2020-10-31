@@ -173,7 +173,7 @@ public func DDLogError(_ message: @autoclosure () -> Any,
 
 /// Returns a String of the current filename, without full path or extension.
 ///
-/// Analogous to the C preprocessor macro `THIS_FILE`.
+/// Analogous to the C preprocessor macro `MSTHIS_FILE`.
 public func currentFileName(_ fileName: StaticString = #file) -> String {
     var str = String(describing: fileName)
     if let idx = str.range(of: "/", options: .backwards)?.upperBound {

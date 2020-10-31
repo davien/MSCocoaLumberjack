@@ -16,11 +16,11 @@
 #import <Foundation/Foundation.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  * This class provides a logger for the Apple os_log facility.
  **/
 API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0))
-@interface DDOSLogger : DDAbstractLogger <DDLogger>
+@interface DDOSLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Singleton method

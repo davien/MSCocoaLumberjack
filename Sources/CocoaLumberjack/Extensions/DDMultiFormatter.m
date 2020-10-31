@@ -24,7 +24,7 @@
     NSMutableArray *_formatters;
 }
 
-- (DDLogMessage *)logMessageForLine:(NSString *)line originalMessage:(DDLogMessage *)message;
+- (MSDDLogMessage *)logMessageForLine:(NSString *)line originalMessage:(MSDDLogMessage *)message;
 
 @end
 
@@ -35,7 +35,7 @@
     self = [super init];
 
     if (self) {
-        _queue = dispatch_queue_create("cocoa.lumberjack.multiformatter", DISPATCH_QUEUE_CONCURRENT);
+        _queue = dispatch_queue_create("cocoa.msxf.lumberjack.multiformatter", DISPATCH_QUEUE_CONCURRENT);
         _formatters = [NSMutableArray new];
     }
 
@@ -44,12 +44,12 @@
 
 #pragma mark Processing
 
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage {
     __block NSString *line = logMessage->_message;
 
     dispatch_sync(_queue, ^{
-        for (id<DDLogFormatter> formatter in self->_formatters) {
-            DDLogMessage *message = [self logMessageForLine:line originalMessage:logMessage];
+        for (id<MSDDLogFormatter> formatter in self->_formatters) {
+            MSDDLogMessage *message = [self logMessageForLine:line originalMessage:logMessage];
             line = [formatter formatLogMessage:message];
 
             if (!line) {
@@ -61,8 +61,8 @@
     return line;
 }
 
-- (DDLogMessage *)logMessageForLine:(NSString *)line originalMessage:(DDLogMessage *)message {
-    DDLogMessage *newMessage = [message copy];
+- (MSDDLogMessage *)logMessageForLine:(NSString *)line originalMessage:(MSDDLogMessage *)message {
+    MSDDLogMessage *newMessage = [message copy];
 
     newMessage->_message = line;
     return newMessage;
@@ -80,13 +80,13 @@
     return formatters;
 }
 
-- (void)addFormatter:(id<DDLogFormatter>)formatter {
+- (void)addFormatter:(id<MSDDLogFormatter>)formatter {
     dispatch_barrier_async(_queue, ^{
         [self->_formatters addObject:formatter];
     });
 }
 
-- (void)removeFormatter:(id<DDLogFormatter>)formatter {
+- (void)removeFormatter:(id<MSDDLogFormatter>)formatter {
     dispatch_barrier_async(_queue, ^{
         [self->_formatters removeObject:formatter];
     });
@@ -98,7 +98,7 @@
     });
 }
 
-- (BOOL)isFormattingWithFormatter:(id<DDLogFormatter>)formatter {
+- (BOOL)isFormattingWithFormatter:(id<MSDDLogFormatter>)formatter {
     __block BOOL hasFormatter;
 
     dispatch_sync(_queue, ^{

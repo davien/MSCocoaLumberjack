@@ -109,7 +109,7 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
 
 #pragma mark - Logging
 
-- (void)logMessage:(DDLogMessage *)logMessage {
+- (void)logMessage:(MSDDLogMessage *)logMessage {
     // Don't need to check for isOnInternalLoggerQueue, -lt_dataForMessage: will do it for us.
     NSData *data = [_fileLogger lt_dataForMessage:logMessage];
 
@@ -150,7 +150,7 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
     if ([self.fileLogger isOnInternalLoggerQueue]) {
         block();
     } else {
-        dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+        dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
         NSAssert(![self.fileLogger isOnGlobalLoggingQueue], @"Core architecture requirement failure");
 
         dispatch_sync(globalLoggingQueue, ^{

@@ -86,7 +86,7 @@ static DDOSLogger *sharedInstance;
     return DDLoggerNameOS;
 }
 
-- (void)logMessage:(DDLogMessage *)logMessage {
+- (void)logMessage:(MSDDLogMessage *)logMessage {
     // Skip captured log messages
     if ([logMessage->_fileName isEqualToString:@"DDASLLogCapture"]) {
         return;
@@ -98,15 +98,15 @@ static DDOSLogger *sharedInstance;
             const char *msg = [message UTF8String];
             __auto_type logger = [self logger];
             switch (logMessage->_flag) {
-                case DDLogFlagError  :
+                case MSDDLogFlagError  :
                     os_log_error(logger, "%{public}s", msg);
                     break;
-                case DDLogFlagWarning:
-                case DDLogFlagInfo   :
+                case MSDDLogFlagWarning:
+                case MSDDLogFlagInfo   :
                     os_log_info(logger, "%{public}s", msg);
                     break;
-                case DDLogFlagDebug  :
-                case DDLogFlagVerbose:
+                case MSDDLogFlagDebug  :
+                case MSDDLogFlagVerbose:
                 default              :
                     os_log_debug(logger, "%{public}s", msg);
                     break;

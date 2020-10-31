@@ -16,11 +16,11 @@
 #import <Foundation/Foundation.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  * For example, logically separate parts of your app each have a different logging context.
  * Also 3rd party frameworks that make use of Lumberjack generally use their own dedicated logging context.
  **/
-@interface DDContextWhitelistFilterLogFormatter : NSObject <DDLogFormatter>
+@interface DDContextWhitelistFilterLogFormatter : NSObject <MSDDLogFormatter>
 
 /**
  *  Designated default initializer
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * This class provides a log formatter that filters log statements from a logging context on the blacklist.
  **/
-@interface DDContextBlacklistFilterLogFormatter : NSObject <DDLogFormatter>
+@interface DDContextBlacklistFilterLogFormatter : NSObject <MSDDLogFormatter>
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 

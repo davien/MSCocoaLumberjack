@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Will assert if used outside logger's queue.
 - (void)lt_logData:(NSData *)data;
 
-- (nullable NSData *)lt_dataForMessage:(DDLogMessage *)message;
+- (nullable NSData *)lt_dataForMessage:(MSDDLogMessage *)message;
 
 @end
 

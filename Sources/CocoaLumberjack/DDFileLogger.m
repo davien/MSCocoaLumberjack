@@ -587,7 +587,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     return self;
 }
 
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage {
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage {
     NSString *dateAndTime = [_dateFormatter stringFromDate:logMessage->_timestamp];
 
     return [NSString stringWithFormat:@"%@  %@", dateAndTime, logMessage->_message];
@@ -698,7 +698,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
     NSAssert(![self isOnInternalLoggerQueue], @"MUST access ivar directly, NOT via self.* syntax.");
 
-    dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+    dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
 
     dispatch_sync(globalLoggingQueue, ^{
         dispatch_sync(self.loggerQueue, block);
@@ -728,7 +728,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
     NSAssert(![self isOnInternalLoggerQueue], @"MUST access ivar directly, NOT via self.* syntax.");
 
-    dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+    dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
 
     dispatch_async(globalLoggingQueue, ^{
         dispatch_async(self.loggerQueue, block);
@@ -755,7 +755,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
     NSAssert(![self isOnInternalLoggerQueue], @"MUST access ivar directly, NOT via self.* syntax.");
 
-    dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+    dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
 
     dispatch_sync(globalLoggingQueue, ^{
         dispatch_sync(self.loggerQueue, block);
@@ -785,7 +785,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
     NSAssert(![self isOnInternalLoggerQueue], @"MUST access ivar directly, NOT via self.* syntax.");
 
-    dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+    dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
 
     dispatch_async(globalLoggingQueue, ^{
         dispatch_async(self.loggerQueue, block);
@@ -869,7 +869,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     if ([self isOnInternalLoggerQueue]) {
         block();
     } else {
-        dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+        dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
         NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
 
         dispatch_async(globalLoggingQueue, ^{
@@ -1019,7 +1019,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
         info = [self lt_currentLogFileInfo];
     };
 
-    dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+    dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
 
     dispatch_sync(globalLoggingQueue, ^{
         dispatch_sync(self->_loggerQueue, block);
@@ -1161,7 +1161,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
 static int exception_count = 0;
 
-- (void)logMessage:(DDLogMessage *)logMessage {
+- (void)logMessage:(MSDDLogMessage *)logMessage {
     // Don't need to check for isOnInternalLoggerQueue, -lt_dataForMessage: will do it for us.
     NSData *data = [self lt_dataForMessage:logMessage];
 
@@ -1204,7 +1204,7 @@ static int exception_count = 0;
     if ([self isOnInternalLoggerQueue]) {
         block();
     } else {
-        dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+        dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
         NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
 
         dispatch_sync(globalLoggingQueue, ^{
@@ -1242,7 +1242,7 @@ static int exception_count = 0;
     if ([self isOnInternalLoggerQueue]) {
         block();
     } else {
-        dispatch_queue_t globalLoggingQueue = [DDLog loggingQueue];
+        dispatch_queue_t globalLoggingQueue = [MSDDLog loggingQueue];
         NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
 
         dispatch_sync(globalLoggingQueue, ^{
@@ -1320,7 +1320,7 @@ static int exception_count = 0;
     }
 }
 
-- (NSData *)lt_dataForMessage:(DDLogMessage *)logMessage {
+- (NSData *)lt_dataForMessage:(MSDDLogMessage *)logMessage {
     NSAssert([self isOnInternalLoggerQueue], @"logMessage should only be executed on internal queue.");
 
     NSString *message = logMessage->_message;

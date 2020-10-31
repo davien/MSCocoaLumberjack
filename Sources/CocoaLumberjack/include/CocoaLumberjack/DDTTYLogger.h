@@ -14,11 +14,11 @@
 //   prior written permission of Deusty, LLC.
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 #define LOG_CONTEXT_ALL INT_MAX
 
@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
  * However, if you instead choose to use file logging (for faster performance),
  * you may choose to use only a file logger and a tty logger.
  **/
-@interface DDTTYLogger : DDAbstractLogger <DDLogger>
+@interface DDTTYLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Singleton instance. Returns `nil` if the initialization of the DDTTYLogger fails.
@@ -131,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * This method invokes setForegroundColor:backgroundColor:forFlag:context: and applies it to `LOG_CONTEXT_ALL`.
  **/
-- (void)setForegroundColor:(nullable DDColor *)txtColor backgroundColor:(nullable DDColor *)bgColor forFlag:(DDLogFlag)mask;
+- (void)setForegroundColor:(nullable DDColor *)txtColor backgroundColor:(nullable DDColor *)bgColor forFlag:(MSDDLogFlag)mask;
 
 /**
  * Just like setForegroundColor:backgroundColor:flag, but allows you to specify a particular logging context.
@@ -144,7 +144,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Logging context's are explained in further detail here:
  * Documentation/CustomContext.md
  **/
-- (void)setForegroundColor:(nullable DDColor *)txtColor backgroundColor:(nullable DDColor *)bgColor forFlag:(DDLogFlag)mask context:(NSInteger)ctxt;
+- (void)setForegroundColor:(nullable DDColor *)txtColor backgroundColor:(nullable DDColor *)bgColor forFlag:(MSDDLogFlag)mask context:(NSInteger)ctxt;
 
 /**
  * Similar to the methods above, but allows you to map DDLogMessage->tag to a particular color profile.
@@ -174,8 +174,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Clearing color profiles.
  **/
-- (void)clearColorsForFlag:(DDLogFlag)mask;
-- (void)clearColorsForFlag:(DDLogFlag)mask context:(NSInteger)context;
+- (void)clearColorsForFlag:(MSDDLogFlag)mask;
+- (void)clearColorsForFlag:(MSDDLogFlag)mask context:(NSInteger)context;
 - (void)clearColorsForTag:(id <NSCopying>)tag;
 - (void)clearColorsForAllFlags;
 - (void)clearColorsForAllTags;

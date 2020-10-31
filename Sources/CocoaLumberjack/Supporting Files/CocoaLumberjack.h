@@ -66,12 +66,12 @@ FOUNDATION_EXPORT double CocoaLumberjackVersionNumber;
 FOUNDATION_EXPORT const unsigned char CocoaLumberjackVersionString[];
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
 // Core
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 // Main macros
 #import <CocoaLumberjack/DDLogMacros.h>
@@ -99,5 +99,5 @@ FOUNDATION_EXPORT const unsigned char CocoaLumberjackVersionString[];
 
 // etc
 #import <CocoaLumberjack/DDAbstractDatabaseLogger.h>
-#import <CocoaLumberjack/DDLog+LOGV.h>
+#import <CocoaLumberjack/MSDDLog+LOGV.h>
 #import <CocoaLumberjack/DDLegacyMacros.h>

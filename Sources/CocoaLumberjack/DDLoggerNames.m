@@ -15,7 +15,7 @@
 
 #import <CocoaLumberjack/DDLoggerNames.h>
 
-DDLoggerName const DDLoggerNameASL    = @"cocoa.lumberjack.aslLogger";
-DDLoggerName const DDLoggerNameTTY    = @"cocoa.lumberjack.ttyLogger";
-DDLoggerName const DDLoggerNameOS     = @"cocoa.lumberjack.osLogger";
-DDLoggerName const DDLoggerNameFile   = @"cocoa.lumberjack.fileLogger";
+DDLoggerName const DDLoggerNameASL    = @"cocoa.msxf.lumberjack.aslLogger";
+DDLoggerName const DDLoggerNameTTY    = @"cocoa.msxf.lumberjack.ttyLogger";
+DDLoggerName const DDLoggerNameOS     = @"cocoa.msxf.lumberjack.osLogger";
+DDLoggerName const DDLoggerNameFile   = @"cocoa.msxf.lumberjack.fileLogger";

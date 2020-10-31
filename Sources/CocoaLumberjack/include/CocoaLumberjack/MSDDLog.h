@@ -18,30 +18,30 @@
 // The Swift Package integration has no support for the legacy macros.
 #if __has_include(<CocoaLumberjack/DDLegacyMacros.h>)
     // Enable 1.9.x legacy macros if imported directly and it's not a swift package build.
-    #ifndef DD_LEGACY_MACROS
-        #define DD_LEGACY_MACROS 1
+    #ifndef MSDD_LEGACY_MACROS
+        #define MSDD_LEGACY_MACROS 1
     #endif
-    // DD_LEGACY_MACROS is checked in the file itself
+    // MSDD_LEGACY_MACROS is checked in the file itself
     #import <CocoaLumberjack/DDLegacyMacros.h>
 #endif
 
-#ifndef DD_LEGACY_MESSAGE_TAG
-    #define DD_LEGACY_MESSAGE_TAG 1
+#ifndef MSDD_LEGACY_MESSAGE_TAG
+    #define MSDD_LEGACY_MESSAGE_TAG 1
 #endif
 
 // Names of loggers.
 #import <CocoaLumberjack/DDLoggerNames.h>
 
 #if OS_OBJECT_USE_OBJC
-    #define DISPATCH_QUEUE_REFERENCE_TYPE strong
+    #define MSDISPATCH_QUEUE_REFERENCE_TYPE strong
 #else
-    #define DISPATCH_QUEUE_REFERENCE_TYPE assign
+    #define MSDISPATCH_QUEUE_REFERENCE_TYPE assign
 #endif
 
-@class DDLogMessage;
-@class DDLoggerInformation;
-@protocol DDLogger;
-@protocol DDLogFormatter;
+@class MSDDLogMessage;
+@class MSDDLoggerInformation;
+@protocol MSDDLogger;
+@protocol MSDDLogFormatter;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -112,71 +112,71 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Flags accompany each log. They are used together with levels to filter out logs.
  */
-typedef NS_OPTIONS(NSUInteger, DDLogFlag){
+typedef NS_OPTIONS(NSUInteger, MSDDLogFlag){
     /**
      *  0...00001 DDLogFlagError
      */
-    DDLogFlagError      = (1 << 0),
+    MSDDLogFlagError      = (1 << 0),
 
     /**
      *  0...00010 DDLogFlagWarning
      */
-    DDLogFlagWarning    = (1 << 1),
+    MSDDLogFlagWarning    = (1 << 1),
 
     /**
      *  0...00100 DDLogFlagInfo
      */
-    DDLogFlagInfo       = (1 << 2),
+    MSDDLogFlagInfo       = (1 << 2),
 
     /**
      *  0...01000 DDLogFlagDebug
      */
-    DDLogFlagDebug      = (1 << 3),
+    MSDDLogFlagDebug      = (1 << 3),
 
     /**
      *  0...10000 DDLogFlagVerbose
      */
-    DDLogFlagVerbose    = (1 << 4)
+    MSDDLogFlagVerbose    = (1 << 4)
 };
 
 /**
  *  Log levels are used to filter out logs. Used together with flags.
  */
-typedef NS_ENUM(NSUInteger, DDLogLevel){
+typedef NS_ENUM(NSUInteger, MSDDLogLevel){
     /**
      *  No logs
      */
-    DDLogLevelOff       = 0,
+    MSDDLogLevelOff       = 0,
 
     /**
      *  Error logs only
      */
-    DDLogLevelError     = (DDLogFlagError),
+    MSDDLogLevelError     = (MSDDLogFlagError),
 
     /**
      *  Error and warning logs
      */
-    DDLogLevelWarning   = (DDLogLevelError   | DDLogFlagWarning),
+    MSDDLogLevelWarning   = (MSDDLogLevelError   | MSDDLogFlagWarning),
 
     /**
      *  Error, warning and info logs
      */
-    DDLogLevelInfo      = (DDLogLevelWarning | DDLogFlagInfo),
+    MSDDLogLevelInfo      = (MSDDLogLevelWarning | MSDDLogFlagInfo),
 
     /**
      *  Error, warning, info and debug logs
      */
-    DDLogLevelDebug     = (DDLogLevelInfo    | DDLogFlagDebug),
+    MSDDLogLevelDebug     = (MSDDLogLevelInfo    | MSDDLogFlagDebug),
 
     /**
      *  Error, warning, info, debug and verbose logs
      */
-    DDLogLevelVerbose   = (DDLogLevelDebug   | DDLogFlagVerbose),
+    MSDDLogLevelVerbose   = (MSDDLogLevelDebug   | MSDDLogFlagVerbose),
 
     /**
      *  All logs (1...11111)
      */
-    DDLogLevelAll       = NSUIntegerMax
+    MSDDLogLevelAll       = NSUIntegerMax
 };
 
 /**
@@ -187,25 +187,25 @@ typedef NS_ENUM(NSUInteger, DDLogLevel){
  *
  *  @return the file name
  */
-FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const char *filePath, BOOL copy);
+FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(const char *filePath, BOOL copy);
 
 /**
- * The THIS_FILE macro gives you an NSString of the file name.
+ * The MSTHIS_FILE macro gives you an NSString of the file name.
  * For simplicity and clarity, the file name does not include the full path or file extension.
  *
- * For example: DDLogWarn(@"%@: Unable to find thingy", THIS_FILE) -> @"MyViewController: Unable to find thingy"
+ * For example: DDLogWarn(@"%@: Unable to find thingy", MSTHIS_FILE) -> @"MyViewController: Unable to find thingy"
  **/
-#define THIS_FILE         (DDExtractFileNameWithoutExtension(__FILE__, NO))
+#define MSTHIS_FILE         (MSDDExtractFileNameWithoutExtension(__FILE__, NO))
 
 /**
- * The THIS_METHOD macro gives you the name of the current objective-c method.
+ * The MSTHIS_METHOD macro gives you the name of the current objective-c method.
  *
- * For example: DDLogWarn(@"%@ - Requires non-nil strings", THIS_METHOD) -> @"setMake:model: requires non-nil strings"
+ * For example: DDLogWarn(@"%@ - Requires non-nil strings", MSTHIS_METHOD) -> @"setMake:model: requires non-nil strings"
  *
  * Note: This does NOT work in straight C functions (non objective-c).
  * Instead you should use the predefined __FUNCTION__ macro.
  **/
-#define THIS_METHOD       NSStringFromSelector(_cmd)
+#define MSTHIS_METHOD       NSStringFromSelector(_cmd)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,19 +216,19 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  The main class, exposes all logging mechanisms, loggers, ...
  *  For most of the users, this class is hidden behind the logging functions like `DDLogInfo`
  */
-@interface DDLog : NSObject
+@interface MSDDLog : NSObject
 
 /**
  *  Returns the singleton `DDLog`.
  *  The instance is used by `DDLog` class methods.
  */
-@property (class, nonatomic, strong, readonly) DDLog *sharedInstance;
+@property (class, nonatomic, strong, readonly) MSDDLog *sharedInstance;
 
 /**
  * Provides access to the underlying logging queue.
  * This may be helpful to Logger classes for things like thread synchronization.
  **/
-@property (class, nonatomic, DISPATCH_QUEUE_REFERENCE_TYPE, readonly) dispatch_queue_t loggingQueue;
+@property (class, nonatomic, MSDISPATCH_QUEUE_REFERENCE_TYPE, readonly) dispatch_queue_t loggingQueue;
 
 /**
  * Logging Primitive.
@@ -247,8 +247,8 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param format       the log format
  */
 + (void)log:(BOOL)asynchronous
-      level:(DDLogLevel)level
-       flag:(DDLogFlag)flag
+      level:(MSDDLogLevel)level
+       flag:(MSDDLogFlag)flag
     context:(NSInteger)context
        file:(const char *)file
    function:(nullable const char *)function
@@ -273,8 +273,8 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param format       the log format
  */
 - (void)log:(BOOL)asynchronous
-      level:(DDLogLevel)level
-       flag:(DDLogFlag)flag
+      level:(MSDDLogLevel)level
+       flag:(MSDDLogFlag)flag
     context:(NSInteger)context
        file:(const char *)file
    function:(nullable const char *)function
@@ -300,8 +300,8 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param argList      the arguments list as a va_list
  */
 + (void)log:(BOOL)asynchronous
-      level:(DDLogLevel)level
-       flag:(DDLogFlag)flag
+      level:(MSDDLogLevel)level
+       flag:(MSDDLogFlag)flag
     context:(NSInteger)context
        file:(const char *)file
    function:(nullable const char *)function
@@ -328,8 +328,8 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param argList      the arguments list as a va_list
  */
 - (void)log:(BOOL)asynchronous
-      level:(DDLogLevel)level
-       flag:(DDLogFlag)flag
+      level:(MSDDLogLevel)level
+       flag:(MSDDLogFlag)flag
     context:(NSInteger)context
        file:(const char *)file
    function:(nullable const char *)function
@@ -347,7 +347,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param logMessage   the log message stored in a `DDLogMessage` model object
  */
 + (void)log:(BOOL)asynchronous
-    message:(DDLogMessage *)logMessage NS_SWIFT_NAME(log(asynchronous:message:));
+    message:(MSDDLogMessage *)logMessage NS_SWIFT_NAME(log(asynchronous:message:));
 
 /**
  * Logging Primitive.
@@ -358,7 +358,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param logMessage   the log message stored in a `DDLogMessage` model object
  */
 - (void)log:(BOOL)asynchronous
-    message:(DDLogMessage *)logMessage NS_SWIFT_NAME(log(asynchronous:message:));
+    message:(MSDDLogMessage *)logMessage NS_SWIFT_NAME(log(asynchronous:message:));
 
 /**
  * Since logging can be asynchronous, there may be times when you want to flush the logs.
@@ -387,14 +387,14 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *
  * This is equivalent to invoking `[DDLog addLogger:logger withLogLevel:DDLogLevelAll]`.
  **/
-+ (void)addLogger:(id <DDLogger>)logger;
++ (void)addLogger:(id <MSDDLogger>)logger;
 
 /**
  * Adds the logger to the system.
  *
  * This is equivalent to invoking `[DDLog addLogger:logger withLogLevel:DDLogLevelAll]`.
  **/
-- (void)addLogger:(id <DDLogger>)logger;
+- (void)addLogger:(id <MSDDLogger>)logger;
 
 /**
  * Adds the logger to the system.
@@ -432,7 +432,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *
  * `((DDLogLevelAll ^ DDLogLevelVerbose) | DDLogLevelInfo)`
  **/
-+ (void)addLogger:(id <DDLogger>)logger withLevel:(DDLogLevel)level;
++ (void)addLogger:(id <MSDDLogger>)logger withLevel:(MSDDLogLevel)level;
 
 /**
  * Adds the logger to the system.
@@ -470,17 +470,17 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *
  * `((DDLogLevelAll ^ DDLogLevelVerbose) | DDLogLevelInfo)`
  **/
-- (void)addLogger:(id <DDLogger>)logger withLevel:(DDLogLevel)level;
+- (void)addLogger:(id <MSDDLogger>)logger withLevel:(MSDDLogLevel)level;
 
 /**
  *  Remove the logger from the system
  */
-+ (void)removeLogger:(id <DDLogger>)logger;
++ (void)removeLogger:(id <MSDDLogger>)logger;
 
 /**
  *  Remove the logger from the system
  */
-- (void)removeLogger:(id <DDLogger>)logger;
+- (void)removeLogger:(id <MSDDLogger>)logger;
 
 /**
  *  Remove all the current loggers
@@ -495,22 +495,22 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
 /**
  *  Return all the current loggers
  */
-@property (class, nonatomic, copy, readonly) NSArray<id<DDLogger>> *allLoggers;
+@property (class, nonatomic, copy, readonly) NSArray<id<MSDDLogger>> *allLoggers;
 
 /**
  *  Return all the current loggers
  */
-@property (nonatomic, copy, readonly) NSArray<id<DDLogger>> *allLoggers;
+@property (nonatomic, copy, readonly) NSArray<id<MSDDLogger>> *allLoggers;
 
 /**
  *  Return all the current loggers with their level (aka DDLoggerInformation).
  */
-@property (class, nonatomic, copy, readonly) NSArray<DDLoggerInformation *> *allLoggersWithLevel;
+@property (class, nonatomic, copy, readonly) NSArray<MSDDLoggerInformation *> *allLoggersWithLevel;
 
 /**
  *  Return all the current loggers with their level (aka DDLoggerInformation).
  */
-@property (nonatomic, copy, readonly) NSArray<DDLoggerInformation *> *allLoggersWithLevel;
+@property (nonatomic, copy, readonly) NSArray<MSDDLoggerInformation *> *allLoggersWithLevel;
 
 /**
  * Registered Dynamic Logging
@@ -534,14 +534,14 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *
  *  @param aClass `Class` param
  */
-+ (DDLogLevel)levelForClass:(Class)aClass;
++ (MSDDLogLevel)levelForClass:(Class)aClass;
 
 /**
  *  Returns the current log level for a certain class
  *
  *  @param aClassName string param
  */
-+ (DDLogLevel)levelForClassWithName:(NSString *)aClassName;
++ (MSDDLogLevel)levelForClassWithName:(NSString *)aClassName;
 
 /**
  *  Set the log level for a certain class
@@ -549,7 +549,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param level  the new level
  *  @param aClass `Class` param
  */
-+ (void)setLevel:(DDLogLevel)level forClass:(Class)aClass;
++ (void)setLevel:(MSDDLogLevel)level forClass:(Class)aClass;
 
 /**
  *  Set the log level for a certain class
@@ -557,7 +557,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  @param level      the new level
  *  @param aClassName string param
  */
-+ (void)setLevel:(DDLogLevel)level forClassWithName:(NSString *)aClassName;
++ (void)setLevel:(MSDDLogLevel)level forClassWithName:(NSString *)aClassName;
 
 @end
 
@@ -570,14 +570,14 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  *  Basically, it can log messages, store a logFormatter plus a bunch of optional behaviors.
  *  (i.e. flush, get its loggerQueue, get its name, ...
  */
-@protocol DDLogger <NSObject>
+@protocol MSDDLogger <NSObject>
 
 /**
  *  The log message method
  *
  *  @param logMessage the message (model)
  */
-- (void)logMessage:(DDLogMessage *)logMessage NS_SWIFT_NAME(log(message:));
+- (void)logMessage:(MSDDLogMessage *)logMessage NS_SWIFT_NAME(log(message:));
 
 /**
  * Formatters may optionally be added to any logger.
@@ -585,7 +585,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * If no formatter is set, the logger simply logs the message as it is given in logMessage,
  * or it may use its own built in formatting style.
  **/
-@property (nonatomic, strong, nullable) id <DDLogFormatter> logFormatter;
+@property (nonatomic, strong, nullable) id <MSDDLogFormatter> logFormatter;
 
 @optional
 
@@ -637,7 +637,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * Thus, a dedicated dispatch queue is used for each logger.
  * Logger implementations may optionally choose to provide their own dispatch queue.
  **/
-@property (nonatomic, DISPATCH_QUEUE_REFERENCE_TYPE, readonly) dispatch_queue_t loggerQueue;
+@property (nonatomic, MSDISPATCH_QUEUE_REFERENCE_TYPE, readonly) dispatch_queue_t loggerQueue;
 
 /**
  * If the logger implementation does not choose to provide its own queue,
@@ -656,7 +656,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
 /**
  *  This protocol describes the behavior of a log formatter
  */
-@protocol DDLogFormatter <NSObject>
+@protocol MSDDLogFormatter <NSObject>
 @required
 
 /**
@@ -670,7 +670,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * The formatter may also optionally filter the log message by returning nil,
  * in which case the logger will not log the message.
  **/
-- (nullable NSString *)formatLogMessage:(DDLogMessage *)logMessage NS_SWIFT_NAME(format(message:));
+- (nullable NSString *)formatLogMessage:(MSDDLogMessage *)logMessage NS_SWIFT_NAME(format(message:));
 
 @optional
 
@@ -683,7 +683,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * Or if a formatter has potentially thread-unsafe code (e.g. NSDateFormatter with 10.0 behavior),
  * it could possibly use these hooks to switch to thread-safe versions of the code.
  **/
-- (void)didAddToLogger:(id <DDLogger>)logger;
+- (void)didAddToLogger:(id <MSDDLogger>)logger;
 
 /**
  * A single formatter instance can be added to multiple loggers.
@@ -695,12 +695,12 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * it could possibly use these hooks to switch to thread-safe versions of the code or use dispatch_set_specific()
 .* to add its own specific values.
  **/
-- (void)didAddToLogger:(id <DDLogger>)logger inQueue:(dispatch_queue_t)queue;
+- (void)didAddToLogger:(id <MSDDLogger>)logger inQueue:(dispatch_queue_t)queue;
 
 /**
  *  See the above description for `didAddToLogger:`
  */
-- (void)willRemoveFromLogger:(id <DDLogger>)logger;
+- (void)willRemoveFromLogger:(id <MSDDLogger>)logger;
 
 @end
 
@@ -711,7 +711,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
 /**
  *  This protocol describes a dynamic logging component
  */
-@protocol DDRegisteredDynamicLogging
+@protocol MSDDRegisteredDynamicLogging
 
 /**
  * Implement these methods to allow a file's log level to be managed from a central location.
@@ -736,7 +736,7 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
  * }
  * ```
  **/
-@property (class, nonatomic, readwrite, setter=ddSetLogLevel:) DDLogLevel ddLogLevel;
+@property (class, nonatomic, readwrite, setter=ddSetLogLevel:) MSDDLogLevel ddLogLevel;
 
 @end
 
@@ -751,39 +751,39 @@ FOUNDATION_EXTERN NSString * __nullable DDExtractFileNameWithoutExtension(const 
 /**
  *  Log message options, allow copying certain log elements
  */
-typedef NS_OPTIONS(NSInteger, DDLogMessageOptions){
+typedef NS_OPTIONS(NSInteger, MSDDLogMessageOptions){
     /**
      *  Use this to use a copy of the file path
      */
-    DDLogMessageCopyFile        = 1 << 0,
+    MSDDLogMessageCopyFile        = 1 << 0,
     /**
      *  Use this to use a copy of the function name
      */
-    DDLogMessageCopyFunction    = 1 << 1,
+    MSDDLogMessageCopyFunction    = 1 << 1,
     /**
      *  Use this to use avoid a copy of the message
      */
-    DDLogMessageDontCopyMessage = 1 << 2
+    MSDDLogMessageDontCopyMessage = 1 << 2
 };
 
 /**
  * The `DDLogMessage` class encapsulates information about the log message.
  * If you write custom loggers or formatters, you will be dealing with objects of this class.
  **/
-@interface DDLogMessage : NSObject <NSCopying>
+@interface MSDDLogMessage : NSObject <NSCopying>
 {
     // Direct accessors to be used only for performance
     @public
     NSString *_message;
-    DDLogLevel _level;
-    DDLogFlag _flag;
+    MSDDLogLevel _level;
+    MSDDLogFlag _flag;
     NSInteger _context;
     NSString *_file;
     NSString *_fileName;
     NSString *_function;
     NSUInteger _line;
     id _representedObject;
-    DDLogMessageOptions _options;
+    MSDDLogMessageOptions _options;
     NSDate * _timestamp;
     NSString *_threadID;
     NSString *_threadName;
@@ -824,14 +824,14 @@ typedef NS_OPTIONS(NSInteger, DDLogMessageOptions){
  *  @return a new instance of a log message model object
  */
 - (instancetype)initWithMessage:(NSString *)message
-                          level:(DDLogLevel)level
-                           flag:(DDLogFlag)flag
+                          level:(MSDDLogLevel)level
+                           flag:(MSDDLogFlag)flag
                         context:(NSInteger)context
                            file:(NSString *)file
                        function:(nullable NSString *)function
                            line:(NSUInteger)line
                             tag:(nullable id)tag
-                        options:(DDLogMessageOptions)options
+                        options:(MSDDLogMessageOptions)options
                       timestamp:(nullable NSDate *)timestamp NS_DESIGNATED_INITIALIZER;
 
 /**
@@ -842,18 +842,18 @@ typedef NS_OPTIONS(NSInteger, DDLogMessageOptions){
  *  The log message
  */
 @property (readonly, nonatomic) NSString *message;
-@property (readonly, nonatomic) DDLogLevel level;
-@property (readonly, nonatomic) DDLogFlag flag;
+@property (readonly, nonatomic) MSDDLogLevel level;
+@property (readonly, nonatomic) MSDDLogFlag flag;
 @property (readonly, nonatomic) NSInteger context;
 @property (readonly, nonatomic) NSString *file;
 @property (readonly, nonatomic) NSString *fileName;
 @property (readonly, nonatomic, nullable) NSString * function;
 @property (readonly, nonatomic) NSUInteger line;
-#if DD_LEGACY_MESSAGE_TAG
+#if MSDD_LEGACY_MESSAGE_TAG
 @property (readonly, nonatomic, nullable) id tag __attribute__((deprecated("Use representedObject instead", "representedObject")));
 #endif
 @property (readonly, nonatomic, nullable) id representedObject;
-@property (readonly, nonatomic) DDLogMessageOptions options;
+@property (readonly, nonatomic) MSDDLogMessageOptions options;
 @property (readonly, nonatomic) NSDate *timestamp;
 @property (readonly, nonatomic) NSString *threadID; // ID as it appears in NSLog calculated from the machThreadID
 @property (readonly, nonatomic, nullable) NSString *threadName;
@@ -882,16 +882,16 @@ typedef NS_OPTIONS(NSInteger, DDLogMessageOptions){
  * Logger implementations may simply extend this class,
  * and they can ACCESS THE FORMATTER VARIABLE DIRECTLY from within their `logMessage:` method!
  **/
-@interface DDAbstractLogger : NSObject <DDLogger>
+@interface MSDDAbstractLogger : NSObject <MSDDLogger>
 {
     // Direct accessors to be used only for performance
     @public
-    id <DDLogFormatter> _logFormatter;
+    id <MSDDLogFormatter> _logFormatter;
     dispatch_queue_t _loggerQueue;
 }
 
-@property (nonatomic, strong, nullable) id <DDLogFormatter> logFormatter;
-@property (nonatomic, DISPATCH_QUEUE_REFERENCE_TYPE) dispatch_queue_t loggerQueue;
+@property (nonatomic, strong, nullable) id <MSDDLogFormatter> logFormatter;
+@property (nonatomic, MSDISPATCH_QUEUE_REFERENCE_TYPE) dispatch_queue_t loggerQueue;
 
 // For thread-safety assertions
 
@@ -911,13 +911,13 @@ typedef NS_OPTIONS(NSInteger, DDLogMessageOptions){
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDLoggerInformation : NSObject
+@interface MSDDLoggerInformation : NSObject
 
-@property (nonatomic, readonly) id <DDLogger> logger;
-@property (nonatomic, readonly) DDLogLevel level;
+@property (nonatomic, readonly) id <MSDDLogger> logger;
+@property (nonatomic, readonly) MSDDLogLevel level;
 
-+ (instancetype)informationWithLogger:(id <DDLogger>)logger
-                             andLevel:(DDLogLevel)level;
++ (instancetype)informationWithLogger:(id <MSDDLogger>)logger
+                             andLevel:(MSDDLogLevel)level;
 
 @end
 

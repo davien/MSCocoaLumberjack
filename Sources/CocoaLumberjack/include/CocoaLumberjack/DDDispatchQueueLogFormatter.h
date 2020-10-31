@@ -16,11 +16,11 @@
 #import <Foundation/Foundation.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -109,7 +109,7 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
  * Note: If manually creating your own background threads (via `NSThread/alloc/init` or `NSThread/detachNeThread`),
  * you can use `[[NSThread currentThread] setName:(NSString *)]`.
  **/
-@interface DDDispatchQueueLogFormatter : NSObject <DDLogFormatter>
+@interface DDDispatchQueueLogFormatter : NSObject <MSDDLogFormatter>
 
 /**
  * Standard init method.
@@ -200,12 +200,12 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
 /**
  *  Method to compute the queue thread label
  */
-- (NSString *)queueThreadLabelForLogMessage:(DDLogMessage *)logMessage;
+- (NSString *)queueThreadLabelForLogMessage:(MSDDLogMessage *)logMessage;
 
 /**
  *  The actual method that formats a message (transforms a `DDLogMessage` model into a printable string)
  */
-- (NSString *)formatLogMessage:(DDLogMessage *)logMessage;
+- (NSString *)formatLogMessage:(MSDDLogMessage *)logMessage;
 
 @end
 

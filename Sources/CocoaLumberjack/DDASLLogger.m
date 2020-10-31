@@ -23,7 +23,7 @@
 
 #import <CocoaLumberjack/DDASLLogger.h>
 
-const char* const kDDASLKeyDDLog = "DDLog";
+const char* const kDDASLKeyDDLog = "MSDDLog";
 const char* const kDDASLDDLogValue = "1";
 
 #pragma clang diagnostic push
@@ -72,7 +72,7 @@ static DDASLLogger *sharedInstance;
     return DDLoggerNameASL;
 }
 
-- (void)logMessage:(DDLogMessage *)logMessage {
+- (void)logMessage:(MSDDLogMessage *)logMessage {
     // Skip captured log messages
     if ([logMessage->_fileName isEqualToString:@"DDASLLogCapture"]) {
         return;
@@ -87,11 +87,11 @@ static DDASLLogger *sharedInstance;
         switch (logMessage->_flag) {
             // Note: By default ASL will filter anything above level 5 (Notice).
             // So our mappings shouldn't go above that level.
-            case DDLogFlagError     : aslLogLevel = ASL_LEVEL_CRIT;     break;
-            case DDLogFlagWarning   : aslLogLevel = ASL_LEVEL_ERR;      break;
-            case DDLogFlagInfo      : aslLogLevel = ASL_LEVEL_WARNING;  break; // Regular NSLog's level
-            case DDLogFlagDebug     :
-            case DDLogFlagVerbose   :
+            case MSDDLogFlagError     : aslLogLevel = ASL_LEVEL_CRIT;     break;
+            case MSDDLogFlagWarning   : aslLogLevel = ASL_LEVEL_ERR;      break;
+            case MSDDLogFlagInfo      : aslLogLevel = ASL_LEVEL_WARNING;  break; // Regular NSLog's level
+            case MSDDLogFlagDebug     :
+            case MSDDLogFlagVerbose   :
             default                 : aslLogLevel = ASL_LEVEL_NOTICE;   break;
         }
 

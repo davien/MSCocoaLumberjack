@@ -15,7 +15,7 @@
 
 #import <CocoaLumberjack/DDASLLogger.h>
 
-@protocol DDLogger;
+@protocol MSDDLogger;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,7 +39,7 @@ API_DEPRECATED("Use DDOSLogger instead", macosx(10.4,10.12), ios(2.0,10.0), watc
  *  The current capture level.
  *  @note Default log level: DDLogLevelVerbose (i.e. capture all ASL messages).
  */
-@property (class) DDLogLevel captureLevel;
+@property (class) MSDDLogLevel captureLevel;
 
 @end
 

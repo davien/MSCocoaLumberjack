@@ -16,11 +16,11 @@
 #import <Foundation/Foundation.h>
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -44,7 +44,7 @@ extern const char* const kDDASLDDLogValue;
  * you may choose to use a file logger and a tty logger.
  **/
 API_DEPRECATED("Use DDOSLogger instead", macosx(10.4,10.12), ios(2.0,10.0), watchos(2.0,3.0), tvos(9.0,10.0))
-@interface DDASLLogger : DDAbstractLogger <DDLogger>
+@interface DDASLLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Singleton method

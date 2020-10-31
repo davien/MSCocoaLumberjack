@@ -14,11 +14,11 @@
 //   prior written permission of Deusty, LLC.
 
 // Disable legacy macros
-#ifndef DD_LEGACY_MACROS
-    #define DD_LEGACY_MACROS 0
+#ifndef MSDD_LEGACY_MACROS
+    #define MSDD_LEGACY_MACROS 0
 #endif
 
-#import <CocoaLumberjack/DDLog.h>
+#import <CocoaLumberjack/MSDDLog.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  * All that is needed for a concrete database logger is to extend this class
  * and override the methods in the implementation file that are prefixed with "db_".
  **/
-@interface DDAbstractDatabaseLogger : DDAbstractLogger {
+@interface DDAbstractDatabaseLogger : MSDDAbstractLogger {
     
 @protected
     NSUInteger _saveThreshold;
