@@ -39,7 +39,7 @@
  * This big multiline macro makes all the other macros easier to read.
  **/
 #define LOGV_MACRO(isAsynchronous, lvl, flg, ctx, atag, fnct, frmt, avalist) \
-        [DDLog log : isAsynchronous                                          \
+        [MSDDLog log : isAsynchronous                                          \
              level : lvl                                                     \
               flag : flg                                                     \
            context : ctx                                                     \
@@ -75,8 +75,8 @@
 /**
  * Ready to use log macros with no context or tag.
  **/
-#define DDLogVError(frmt, avalist)   LOGV_MAYBE(NO,                LOG_LEVEL_DEF, DDLogFlagError,   0, nil, __PRETTY_FUNCTION__, frmt, avalist)
-#define DDLogVWarn(frmt, avalist)    LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, DDLogFlagWarning, 0, nil, __PRETTY_FUNCTION__, frmt, avalist)
-#define DDLogVInfo(frmt, avalist)    LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, DDLogFlagInfo,    0, nil, __PRETTY_FUNCTION__, frmt, avalist)
-#define DDLogVDebug(frmt, avalist)   LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, DDLogFlagDebug,   0, nil, __PRETTY_FUNCTION__, frmt, avalist)
-#define DDLogVVerbose(frmt, avalist) LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, DDLogFlagVerbose, 0, nil, __PRETTY_FUNCTION__, frmt, avalist)
+#define DDLogVError(frmt, avalist)   LOGV_MAYBE(NO,                LOG_LEVEL_DEF, MSDDLogFlagError,   0, nil, __PRETTY_FUNCTION__, frmt, avalist)
+#define DDLogVWarn(frmt, avalist)    LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, MSDDLogFlagWarning, 0, nil, __PRETTY_FUNCTION__, frmt, avalist)
+#define DDLogVInfo(frmt, avalist)    LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, MSDDLogFlagInfo,    0, nil, __PRETTY_FUNCTION__, frmt, avalist)
+#define DDLogVDebug(frmt, avalist)   LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, MSDDLogFlagDebug,   0, nil, __PRETTY_FUNCTION__, frmt, avalist)
+#define DDLogVVerbose(frmt, avalist) LOGV_MAYBE(LOG_ASYNC_ENABLED, LOG_LEVEL_DEF, MSDDLogFlagVerbose, 0, nil, __PRETTY_FUNCTION__, frmt, avalist)
