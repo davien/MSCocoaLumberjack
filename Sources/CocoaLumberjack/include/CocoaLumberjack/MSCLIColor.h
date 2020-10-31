@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * This class represents an NSColor replacement for CLI projects that don't link with AppKit
  **/
-@interface CLIColor : NSObject
+@interface MSCLIColor : NSObject
 
 /**
  *  Convenience method for creating a `CLIColor` instance from RGBA params

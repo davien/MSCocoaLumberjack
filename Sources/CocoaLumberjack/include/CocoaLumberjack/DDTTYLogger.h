@@ -31,8 +31,8 @@
     static inline DDColor* _Nonnull DDMakeColor(CGFloat r, CGFloat g, CGFloat b) {return [DDColor colorWithRed:(r/255.0f) green:(g/255.0f) blue:(b/255.0f) alpha:1.0f];}
 #elif defined(DD_CLI) || !__has_include(<AppKit/NSColor.h>)
     // OS X CLI
-    #import <CocoaLumberjack/CLIColor.h>
-    typedef CLIColor DDColor;
+    #import <CocoaLumberjack/MSCLIColor.h>
+    typedef MSCLIColor DDColor;
     static inline DDColor* _Nonnull DDMakeColor(CGFloat r, CGFloat g, CGFloat b) {return [DDColor colorWithCalibratedRed:(r/255.0f) green:(g/255.0f) blue:(b/255.0f) alpha:1.0f];}
 #else
     // OS X with AppKit

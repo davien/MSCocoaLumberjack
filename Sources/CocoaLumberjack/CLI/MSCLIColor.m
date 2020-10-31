@@ -15,19 +15,19 @@
 
 #if TARGET_OS_OSX
 
-#import <CocoaLumberjack/CLIColor.h>
+#import <CocoaLumberjack/MSCLIColor.h>
 
-@interface CLIColor () {
+@interface MSCLIColor () {
     CGFloat _red, _green, _blue, _alpha;
 }
 
 @end
 
 
-@implementation CLIColor
+@implementation MSCLIColor
 
 + (instancetype)colorWithCalibratedRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-    CLIColor *color = [CLIColor new];
+    MSCLIColor *color = [MSCLIColor new];
     color->_red     = red;
     color->_green   = green;
     color->_blue    = blue;
