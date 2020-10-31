@@ -39,7 +39,7 @@
  * These big multiline macros makes all the other macros easier to read.
  **/
 #define LOG_MACRO(isAsynchronous, lvl, flg, ctx, atag, fnct, frmt, ...) \
-        [DDLog log : isAsynchronous                                     \
+        [MSDDLog log : isAsynchronous                                     \
              level : lvl                                                \
               flag : flg                                                \
            context : ctx                                                \
@@ -50,7 +50,7 @@
             format : (frmt), ## __VA_ARGS__]
 
 #define LOG_MACRO_TO_DDLOG(ddlog, isAsynchronous, lvl, flg, ctx, atag, fnct, frmt, ...) \
-        [ddlog log : isAsynchronous                                     \
+        [MSddlog log : isAsynchronous                                     \
              level : lvl                                                \
               flag : flg                                                \
            context : ctx                                                \
