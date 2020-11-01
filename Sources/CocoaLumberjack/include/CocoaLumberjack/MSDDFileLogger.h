@@ -20,7 +20,7 @@
 
 #import <CocoaLumberjack/MSDDLog.h>
 
-@class DDLogFileInfo;
+@class MSDDLogFileInfo;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -38,10 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 //
 // You should carefully consider the proper configuration values for your application.
 
-extern unsigned long long const kDDDefaultLogMaxFileSize;
-extern NSTimeInterval     const kDDDefaultLogRollingFrequency;
-extern NSUInteger         const kDDDefaultLogMaxNumLogFiles;
-extern unsigned long long const kDDDefaultLogFilesDiskQuota;
+extern unsigned long long const kMSDDDefaultLogMaxFileSize;
+extern NSTimeInterval     const kMSDDDefaultLogRollingFrequency;
+extern NSUInteger         const kMSDDDefaultLogMaxNumLogFiles;
+extern unsigned long long const kMSDDDefaultLogFilesDiskQuota;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *  The `DDLogFileInfo` class is documented below, and provides a handy wrapper that
  *  gives you easy access to various file attributes such as the creation date or the file size.
  */
-@protocol DDLogFileManager <NSObject>
+@protocol MSDDLogFileManager <NSObject>
 @required
 
 // Public properties
@@ -118,7 +118,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  * each representing an existing log file on disk,
  * and containing important information about the log file such as it's modification date and size.
  **/
-@property (nonatomic, readonly, strong) NSArray<DDLogFileInfo *> *unsortedLogFileInfos;
+@property (nonatomic, readonly, strong) NSArray<MSDDLogFileInfo *> *unsortedLogFileInfos;
 
 /**
  * Just like the `unsortedLogFilePaths` method, but sorts the array.
@@ -139,7 +139,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  * The items in the array are sorted by creation date.
  * The first item in the array will be the most recently created log file.
  **/
-@property (nonatomic, readonly, strong) NSArray<DDLogFileInfo *> *sortedLogFileInfos;
+@property (nonatomic, readonly, strong) NSArray<MSDDLogFileInfo *> *sortedLogFileInfos;
 
 // Private methods (only to be used by DDFileLogger)
 
@@ -197,7 +197,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *
  * Archived log files are automatically deleted according to the `maximumNumberOfLogFiles` property.
  **/
-@interface DDLogFileManagerDefault : NSObject <DDLogFileManager>
+@interface MSDDLogFileManagerDefault : NSObject <MSDDLogFileManager>
 
 /**
  *  Default initializer
@@ -308,7 +308,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  * In addition to the convenience of having a logical default formatter,
  * it will also provide a template that makes it easy for developers to copy and change.
  **/
-@interface DDLogFileFormatterDefault : NSObject <MSDDLogFormatter>
+@interface MSDDLogFileFormatterDefault : NSObject <MSDDLogFormatter>
 
 /**
  *  Default initializer
@@ -329,7 +329,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
 /**
  *  The standard implementation for a file logger
  */
-@interface DDFileLogger : MSDDAbstractLogger <MSDDLogger>
+@interface MSDDFileLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Default initializer.
@@ -341,7 +341,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *  A global queue w/ default priority is used to run callbacks.
  *  If needed, specify queue using `initWithLogFileManager:completionQueue:`.
  */
-- (instancetype)initWithLogFileManager:(id <DDLogFileManager>)logFileManager;
+- (instancetype)initWithLogFileManager:(id <MSDDLogFileManager>)logFileManager;
 
 /**
  *  Designated initializer, requires a `DDLogFileManager` instance.
@@ -349,7 +349,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *  and the callback in `rollLogFileWithCompletionBlock:`.
  *  If nil, a global queue w/ default priority is used.
  */
-- (instancetype)initWithLogFileManager:(id <DDLogFileManager>)logFileManager
+- (instancetype)initWithLogFileManager:(id <MSDDLogFileManager>)logFileManager
                        completionQueue:(nullable dispatch_queue_t)dispatchQueue NS_DESIGNATED_INITIALIZER;
 
 /**
@@ -365,12 +365,12 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
 /**
  *  Called when the logger is about to write message. Call super before your implementation.
  */
-- (void)willLogMessage:(DDLogFileInfo *)logFileInfo NS_REQUIRES_SUPER;
+- (void)willLogMessage:(MSDDLogFileInfo *)logFileInfo NS_REQUIRES_SUPER;
 
 /**
  *  Called when the logger wrote message. Call super after your implementation.
  */
-- (void)didLogMessage:(DDLogFileInfo *)logFileInfo NS_REQUIRES_SUPER;
+- (void)didLogMessage:(MSDDLogFileInfo *)logFileInfo NS_REQUIRES_SUPER;
 
 /**
  *  Writes all in-memory log data to the permanent storage. Call super before your implementation.
@@ -383,7 +383,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *  Override this method to extend standard behavior. By default returns NO.
  *  This is executed directly on the logger's internal queue, so keep processing light!
  */
-- (BOOL)shouldArchiveRecentLogFileInfo:(DDLogFileInfo *)recentLogFileInfo;
+- (BOOL)shouldArchiveRecentLogFileInfo:(MSDDLogFileInfo *)recentLogFileInfo;
 
 /**
  * Log File Rolling:
@@ -437,7 +437,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *
  * @see DDLogFileManager.maximumNumberOfLogFiles
  **/
-@property (strong, nonatomic, readonly) id <DDLogFileManager> logFileManager;
+@property (strong, nonatomic, readonly) id <MSDDLogFileManager> logFileManager;
 
 /**
  * When using a custom formatter you can set the `logMessage` method not to append
@@ -471,7 +471,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  *
  * Otherwise a new file is created and returned. If this failes, `NULL` is returned.
  **/
-@property (nonatomic, nullable, readonly, strong) DDLogFileInfo *currentLogFileInfo;
+@property (nonatomic, nullable, readonly, strong) MSDDLogFileInfo *currentLogFileInfo;
 
 @end
 
@@ -493,7 +493,7 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
  * If you absolutely must get updated values,
  * you can invoke the reset method which will clear the cache.
  **/
-@interface DDLogFileInfo : NSObject
+@interface MSDDLogFileInfo : NSObject
 
 @property (strong, nonatomic, readonly) NSString *filePath;
 @property (strong, nonatomic, readonly) NSString *fileName;
@@ -522,8 +522,8 @@ extern unsigned long long const kDDDefaultLogFilesDiskQuota;
 - (void)addExtendedAttributeWithName:(NSString *)attrName;
 - (void)removeExtendedAttributeWithName:(NSString *)attrName;
 
-- (NSComparisonResult)reverseCompareByCreationDate:(DDLogFileInfo *)another;
-- (NSComparisonResult)reverseCompareByModificationDate:(DDLogFileInfo *)another;
+- (NSComparisonResult)reverseCompareByCreationDate:(MSDDLogFileInfo *)another;
+- (NSComparisonResult)reverseCompareByModificationDate:(MSDDLogFileInfo *)another;
 
 @end
 

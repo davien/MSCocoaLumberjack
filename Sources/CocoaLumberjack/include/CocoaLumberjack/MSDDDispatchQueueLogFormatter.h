@@ -27,18 +27,18 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Log formatter mode
  */
-__attribute__((deprecated("DDDispatchQueueLogFormatter is always shareable")))
-typedef NS_ENUM(NSUInteger, DDDispatchQueueLogFormatterMode){
+__attribute__((deprecated("MSDDDispatchQueueLogFormatter is always shareable")))
+typedef NS_ENUM(NSUInteger, MSDDDispatchQueueLogFormatterMode){
     /**
      *  This is the default option, means the formatter can be reused between multiple loggers and therefore is thread-safe.
      *  There is, of course, a performance cost for the thread-safety
      */
-    DDDispatchQueueLogFormatterModeShareble = 0,
+    MSDDDispatchQueueLogFormatterModeShareble = 0,
     /**
      *  If the formatter will only be used by a single logger, then the thread-safety can be removed
      *  @note: there is an assert checking if the formatter is added to multiple loggers and the mode is non-shareble
      */
-    DDDispatchQueueLogFormatterModeNonShareble,
+    MSDDDispatchQueueLogFormatterModeNonShareble,
 };
 
 /**
@@ -63,14 +63,14 @@ typedef NS_ENUM(NSUInteger, DDDispatchQueueLogFormatterMode){
  *
  * Note: QOS will be absent in the log messages if running on OS versions that don't support it.
  **/
-typedef NSString * DDQualityOfServiceName NS_STRING_ENUM;
+typedef NSString * MSDDQualityOfServiceName NS_STRING_ENUM;
 
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUserInteractive NS_SWIFT_NAME(DDQualityOfServiceName.userInteractive) API_AVAILABLE(macos(10.10), ios(8.0));
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUserInitiated NS_SWIFT_NAME(DDQualityOfServiceName.userInitiated) API_AVAILABLE(macos(10.10), ios(8.0));
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceDefault NS_SWIFT_NAME(DDQualityOfServiceName.default) API_AVAILABLE(macos(10.10), ios(8.0));
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUtility NS_SWIFT_NAME(DDQualityOfServiceName.utility) API_AVAILABLE(macos(10.10), ios(8.0));
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceBackground NS_SWIFT_NAME(DDQualityOfServiceName.background) API_AVAILABLE(macos(10.10), ios(8.0));
-FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_SWIFT_NAME(DDQualityOfServiceName.unspecified) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceUserInteractive NS_SWIFT_NAME(DDQualityOfServiceName.userInteractive) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceUserInitiated NS_SWIFT_NAME(DDQualityOfServiceName.userInitiated) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceDefault NS_SWIFT_NAME(DDQualityOfServiceName.default) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceUtility NS_SWIFT_NAME(DDQualityOfServiceName.utility) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceBackground NS_SWIFT_NAME(DDQualityOfServiceName.background) API_AVAILABLE(macos(10.10), ios(8.0));
+FOUNDATION_EXPORT MSDDQualityOfServiceName const MSDDQualityOfServiceUnspecified NS_SWIFT_NAME(DDQualityOfServiceName.unspecified) API_AVAILABLE(macos(10.10), ios(8.0));
 
 /**
  * This class provides a log formatter that prints the dispatch_queue label instead of the mach_thread_id.
@@ -79,7 +79,7 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
  * You can learn more about log formatters here:
  * Documentation/CustomFormatters.md
  *
- * A typical `NSLog` (or `DDTTYLogger`) prints detailed info as `[<process_id>:<thread_id>]`.
+ * A typical `NSLog` (or `MSDDTTYLogger`) prints detailed info as `[<process_id>:<thread_id>]`.
  * For example:
  *
  * `2011-10-17 20:21:45.435 AppName[19928:5207] Your log message here`
@@ -109,7 +109,7 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
  * Note: If manually creating your own background threads (via `NSThread/alloc/init` or `NSThread/detachNeThread`),
  * you can use `[[NSThread currentThread] setName:(NSString *)]`.
  **/
-@interface DDDispatchQueueLogFormatter : NSObject <MSDDLogFormatter>
+@interface MSDDDispatchQueueLogFormatter : NSObject <MSDDLogFormatter>
 
 /**
  * Standard init method.
@@ -122,7 +122,7 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
  *
  *  @param mode choose between DDDispatchQueueLogFormatterModeShareble and DDDispatchQueueLogFormatterModeNonShareble, depending if the formatter is shared between several loggers or not
  */
-- (instancetype)initWithMode:(DDDispatchQueueLogFormatterMode)mode __attribute__((deprecated("DDDispatchQueueLogFormatter is always shareable")));
+- (instancetype)initWithMode:(MSDDDispatchQueueLogFormatterMode)mode __attribute__((deprecated("MSDDDispatchQueueLogFormatter is always shareable")));
 
 /**
  * The minQueueLength restricts the minimum size of the [detail box].
@@ -185,7 +185,7 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
 /**
  *  Category on `DDDispatchQueueLogFormatter` to make method declarations easier to extend/modify
  **/
-@interface DDDispatchQueueLogFormatter (OverridableMethods)
+@interface MSDDDispatchQueueLogFormatter (OverridableMethods)
 
 /**
  *  Date formatter default configuration
@@ -211,8 +211,8 @@ FOUNDATION_EXPORT DDQualityOfServiceName const DDQualityOfServiceUnspecified NS_
 
 #pragma mark - DDAtomicCountable
 
-__attribute__((deprecated("DDAtomicCountable is useless since DDDispatchQueueLogFormatter is always shareable now")))
-@protocol DDAtomicCountable <NSObject>
+__attribute__((deprecated("MSDDAtomicCountable is useless since MSDDDispatchQueueLogFormatter is always shareable now")))
+@protocol MSDDAtomicCountable <NSObject>
 
 - (instancetype)initWithDefaultValue:(int32_t)defaultValue;
 - (int32_t)increment;
@@ -221,8 +221,8 @@ __attribute__((deprecated("DDAtomicCountable is useless since DDDispatchQueueLog
 
 @end
 
-__attribute__((deprecated("DDAtomicCountable is deprecated")))
-@interface DDAtomicCounter: NSObject<DDAtomicCountable>
+__attribute__((deprecated("MSDDAtomicCountable is deprecated")))
+@interface MSDDAtomicCounter: NSObject<MSDDAtomicCountable>
 @end
 
 NS_ASSUME_NONNULL_END

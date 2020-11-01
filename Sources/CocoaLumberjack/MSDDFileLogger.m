@@ -19,7 +19,7 @@
 
 #import <sys/xattr.h>
 
-#import "DDFileLogger+Internal.h"
+#import "MSDDFileLogger+Internal.h"
 
 // We probably shouldn't be using DDLog() statements within the DDLog implementation.
 // But we still want to leave our log statements for any future debugging,
@@ -28,25 +28,25 @@
 // So we use primitive logging macros around NSLog.
 // We maintain the NS prefix on the macros to be explicit about the fact that we're using NSLog.
 
-#ifndef DD_NSLOG_LEVEL
-    #define DD_NSLOG_LEVEL 2
+#ifndef MSDD_NSLOG_LEVEL
+    #define MSDD_NSLOG_LEVEL 2
 #endif
 
-#define NSLogError(frmt, ...)    do{ if(DD_NSLOG_LEVEL >= 1) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogWarn(frmt, ...)     do{ if(DD_NSLOG_LEVEL >= 2) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogInfo(frmt, ...)     do{ if(DD_NSLOG_LEVEL >= 3) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogDebug(frmt, ...)    do{ if(DD_NSLOG_LEVEL >= 4) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogVerbose(frmt, ...)  do{ if(DD_NSLOG_LEVEL >= 5) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogError(frmt, ...)    do{ if(MSDD_NSLOG_LEVEL >= 1) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogWarn(frmt, ...)     do{ if(MSDD_NSLOG_LEVEL >= 2) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogInfo(frmt, ...)     do{ if(MSDD_NSLOG_LEVEL >= 3) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogDebug(frmt, ...)    do{ if(MSDD_NSLOG_LEVEL >= 4) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogVerbose(frmt, ...)  do{ if(MSDD_NSLOG_LEVEL >= 5) NSLog((frmt), ##__VA_ARGS__); } while(0)
 
 
 #if TARGET_OS_IPHONE
 BOOL doesAppRunInBackground(void);
 #endif
 
-unsigned long long const kDDDefaultLogMaxFileSize      = 1024 * 1024;      // 1 MB
-NSTimeInterval     const kDDDefaultLogRollingFrequency = 60 * 60 * 24;     // 24 Hours
-NSUInteger         const kDDDefaultLogMaxNumLogFiles   = 5;                // 5 Files
-unsigned long long const kDDDefaultLogFilesDiskQuota   = 20 * 1024 * 1024; // 20 MB
+unsigned long long const kMSDDDefaultLogMaxFileSize      = 1024 * 1024;      // 1 MB
+NSTimeInterval     const kMSDDDefaultLogRollingFrequency = 60 * 60 * 24;     // 24 Hours
+NSUInteger         const kMSDDDefaultLogMaxNumLogFiles   = 5;                // 5 Files
+unsigned long long const kMSDDDefaultLogFilesDiskQuota   = 20 * 1024 * 1024; // 20 MB
 
 NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
@@ -54,7 +54,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDLogFileManagerDefault () {
+@interface MSDDLogFileManagerDefault () {
     NSDateFormatter *_fileDateFormatter;
     NSUInteger _maximumNumberOfLogFiles;
     unsigned long long _logFilesDiskQuota;
@@ -66,7 +66,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
 @end
 
-@implementation DDLogFileManagerDefault
+@implementation MSDDLogFileManagerDefault
 
 @synthesize maximumNumberOfLogFiles = _maximumNumberOfLogFiles;
 @synthesize logFilesDiskQuota = _logFilesDiskQuota;
@@ -85,8 +85,8 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
 - (instancetype)initWithLogsDirectory:(nullable NSString *)aLogsDirectory {
     if ((self = [super init])) {
-        _maximumNumberOfLogFiles = kDDDefaultLogMaxNumLogFiles;
-        _logFilesDiskQuota = kDDDefaultLogFilesDiskQuota;
+        _maximumNumberOfLogFiles = kMSDDDefaultLogMaxNumLogFiles;
+        _logFilesDiskQuota = kMSDDDefaultLogFilesDiskQuota;
 
         _fileDateFormatter = [[NSDateFormatter alloc] init];
         [_fileDateFormatter setLocale:[NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]];
@@ -201,7 +201,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
         unsigned long long used = 0;
 
         for (NSUInteger i = 0; i < sortedLogFileInfos.count; i++) {
-            DDLogFileInfo *info = sortedLogFileInfos[i];
+            MSDDLogFileInfo *info = sortedLogFileInfos[i];
             used += info.fileSize;
 
             if (used > diskQuota) {
@@ -226,7 +226,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
         // So in most cases, we do not want to consider this file for deletion.
 
         if (sortedLogFileInfos.count > 0) {
-            DDLogFileInfo *logFileInfo = sortedLogFileInfos[0];
+            MSDDLogFileInfo *logFileInfo = sortedLogFileInfos[0];
 
             if (!logFileInfo.isArchived) {
                 // Don't delete active file.
@@ -239,7 +239,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
         // removing all log files starting with firstIndexToDelete
 
         for (NSUInteger i = firstIndexToDelete; i < sortedLogFileInfos.count; i++) {
-            DDLogFileInfo *logFileInfo = sortedLogFileInfos[i];
+            MSDDLogFileInfo *logFileInfo = sortedLogFileInfos[i];
 
             NSError *error = nil;
             BOOL success = [[NSFileManager defaultManager] removeItemAtPath:logFileInfo.filePath error:&error];
@@ -359,7 +359,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSMutableArray *unsortedLogFileInfos = [NSMutableArray arrayWithCapacity:[unsortedLogFilePaths count]];
 
     for (NSString *filePath in unsortedLogFilePaths) {
-        DDLogFileInfo *logFileInfo = [[DDLogFileInfo alloc] initWithFilePath:filePath];
+        MSDDLogFileInfo *logFileInfo = [[MSDDLogFileInfo alloc] initWithFilePath:filePath];
 
         [unsortedLogFileInfos addObject:logFileInfo];
     }
@@ -372,7 +372,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
     NSMutableArray *sortedLogFilePaths = [NSMutableArray arrayWithCapacity:[sortedLogFileInfos count]];
 
-    for (DDLogFileInfo *logFileInfo in sortedLogFileInfos) {
+    for (MSDDLogFileInfo *logFileInfo in sortedLogFileInfos) {
         [sortedLogFilePaths addObject:[logFileInfo filePath]];
     }
 
@@ -384,7 +384,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
     NSMutableArray *sortedLogFileNames = [NSMutableArray arrayWithCapacity:[sortedLogFileInfos count]];
 
-    for (DDLogFileInfo *logFileInfo in sortedLogFileInfos) {
+    for (MSDDLogFileInfo *logFileInfo in sortedLogFileInfos) {
         [sortedLogFileNames addObject:[logFileInfo fileName]];
     }
 
@@ -392,8 +392,8 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 }
 
 - (NSArray *)sortedLogFileInfos {
-    return [[self unsortedLogFileInfos] sortedArrayUsingComparator:^NSComparisonResult(DDLogFileInfo *obj1,
-                                                                                       DDLogFileInfo *obj2) {
+    return [[self unsortedLogFileInfos] sortedArrayUsingComparator:^NSComparisonResult(MSDDLogFileInfo *obj1,
+                                                                                       MSDDLogFileInfo *obj2) {
         NSDate *date1 = [NSDate new];
         NSDate *date2 = [NSDate new];
 
@@ -559,13 +559,13 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDLogFileFormatterDefault () {
+@interface MSDDLogFileFormatterDefault () {
     NSDateFormatter *_dateFormatter;
 }
 
 @end
 
-@implementation DDLogFileFormatterDefault
+@implementation MSDDLogFileFormatterDefault
 
 - (instancetype)init {
     return [self initWithDateFormatter:nil];
@@ -599,10 +599,10 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDFileLogger () {
-    id <DDLogFileManager> _logFileManager;
+@interface MSDDFileLogger () {
+    id <MSDDLogFileManager> _logFileManager;
 
-    DDLogFileInfo *_currentLogFileInfo;
+    MSDDLogFileInfo *_currentLogFileInfo;
     NSFileHandle *_currentLogFileHandle;
 
     dispatch_source_t _currentLogFileVnode;
@@ -619,29 +619,29 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wincomplete-implementation"
-@implementation DDFileLogger
+@implementation MSDDFileLogger
 #pragma clang diagnostic pop
 
 - (instancetype)init {
-    DDLogFileManagerDefault *defaultLogFileManager = [[DDLogFileManagerDefault alloc] init];
+    MSDDLogFileManagerDefault *defaultLogFileManager = [[MSDDLogFileManagerDefault alloc] init];
     return [self initWithLogFileManager:defaultLogFileManager completionQueue:nil];
 }
 
-- (instancetype)initWithLogFileManager:(id<DDLogFileManager>)logFileManager {
+- (instancetype)initWithLogFileManager:(id<MSDDLogFileManager>)logFileManager {
     return [self initWithLogFileManager:logFileManager completionQueue:nil];
 }
 
-- (instancetype)initWithLogFileManager:(id <DDLogFileManager>)aLogFileManager
+- (instancetype)initWithLogFileManager:(id <MSDDLogFileManager>)aLogFileManager
                        completionQueue:(nullable dispatch_queue_t)dispatchQueue {
     if ((self = [super init])) {
         _completionQueue = dispatchQueue ?: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
-        _maximumFileSize = kDDDefaultLogMaxFileSize;
-        _rollingFrequency = kDDDefaultLogRollingFrequency;
+        _maximumFileSize = kMSDDDefaultLogMaxFileSize;
+        _rollingFrequency = kMSDDDefaultLogRollingFrequency;
         _automaticallyAppendNewlineForCustomFormatters = YES;
 
         _logFileManager = aLogFileManager;
-        _logFormatter = [DDLogFileFormatterDefault new];
+        _logFormatter = [MSDDLogFileFormatterDefault new];
     }
 
     return self;
@@ -812,10 +812,10 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSTimeInterval frequency = MIN(_rollingFrequency, DBL_MAX - [logFileCreationDate timeIntervalSinceReferenceDate]);
     NSDate *logFileRollingDate = [logFileCreationDate dateByAddingTimeInterval:frequency];
 
-    NSLogVerbose(@"DDFileLogger: scheduleTimerToRollLogFileDueToAge");
-    NSLogVerbose(@"DDFileLogger: logFileCreationDate    : %@", logFileCreationDate);
-    NSLogVerbose(@"DDFileLogger: actual rollingFrequency: %f", frequency);
-    NSLogVerbose(@"DDFileLogger: logFileRollingDate     : %@", logFileRollingDate);
+    NSLogVerbose(@"MSDDFileLogger: scheduleTimerToRollLogFileDueToAge");
+    NSLogVerbose(@"MSDDFileLogger: logFileCreationDate    : %@", logFileCreationDate);
+    NSLogVerbose(@"MSDDFileLogger: actual rollingFrequency: %f", frequency);
+    NSLogVerbose(@"MSDDFileLogger: logFileRollingDate     : %@", logFileRollingDate);
 
     _rollingTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _loggerQueue);
 
@@ -930,7 +930,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert([self isOnInternalLoggerQueue], @"lt_ methods should be on logger queue.");
 
     if (_rollingFrequency > 0.0 && (_currentLogFileInfo.age + kDDRollingLeeway) >= _rollingFrequency) {
-        NSLogVerbose(@"DDFileLogger: Rolling log file due to age...");
+        NSLogVerbose(@"MSDDFileLogger: Rolling log file due to age...");
         [self lt_rollLogFileNow];
     } else {
         [self lt_scheduleTimerToRollLogFileDueToAge];
@@ -950,7 +950,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
         unsigned long long fileSize = [_currentLogFileHandle offsetInFile];
 
         if (fileSize >= _maximumFileSize) {
-            NSLogVerbose(@"DDFileLogger: Rolling log file due to size (%qu)...", fileSize);
+            NSLogVerbose(@"MSDDFileLogger: Rolling log file due to size (%qu)...", fileSize);
 
             [self lt_rollLogFileNow];
         }
@@ -961,7 +961,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 #pragma mark File Logging
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-- (BOOL)lt_shouldLogFileBeArchived:(DDLogFileInfo *)mostRecentLogFileInfo {
+- (BOOL)lt_shouldLogFileBeArchived:(MSDDLogFileInfo *)mostRecentLogFileInfo {
     NSAssert([self isOnInternalLoggerQueue], @"lt_ methods should be on logger queue.");
 
     if (mostRecentLogFileInfo.isArchived) {
@@ -1006,7 +1006,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
  *
  * Otherwise a new file is created and returned.
  **/
-- (DDLogFileInfo *)currentLogFileInfo {
+- (MSDDLogFileInfo *)currentLogFileInfo {
     // The design of this method is taken from the DDAbstractLogger implementation.
     // For extensive documentation please refer to the DDAbstractLogger implementation.
     // Do not access this method on any Lumberjack queue, will deadlock.
@@ -1014,7 +1014,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     NSAssert(![self isOnGlobalLoggingQueue], @"Core architecture requirement failure");
     NSAssert(![self isOnInternalLoggerQueue], @"MUST access ivar directly, NOT via self.* syntax.");
 
-    __block DDLogFileInfo *info = nil;
+    __block MSDDLogFileInfo *info = nil;
     dispatch_block_t block = ^{
         info = [self lt_currentLogFileInfo];
     };
@@ -1028,11 +1028,11 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     return info;
 }
 
-- (DDLogFileInfo *)lt_currentLogFileInfo {
+- (MSDDLogFileInfo *)lt_currentLogFileInfo {
     NSAssert([self isOnInternalLoggerQueue], @"lt_ methods should be on logger queue.");
 
     // Get the current log file info ivar (might be nil).
-    DDLogFileInfo *newCurrentLogFile = _currentLogFileInfo;
+    MSDDLogFileInfo *newCurrentLogFile = _currentLogFileInfo;
 
     // Check if we're resuming and if so, get the first of the sorted log file infos.
     BOOL isResuming = newCurrentLogFile == nil;
@@ -1044,7 +1044,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
     // Check if the file we've found is still valid. Otherwise create a new one.
     if (newCurrentLogFile != nil && [self lt_shouldUseLogFile:newCurrentLogFile isResuming:isResuming]) {
         if (isResuming) {
-            NSLogVerbose(@"DDFileLogger: Resuming logging with file %@", newCurrentLogFile.fileName);
+            NSLogVerbose(@"MSDDFileLogger: Resuming logging with file %@", newCurrentLogFile.fileName);
         }
         _currentLogFileInfo = newCurrentLogFile;
     } else {
@@ -1053,7 +1053,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
             __autoreleasing NSError *error;
             currentLogFilePath = [_logFileManager createNewLogFileWithError:&error];
             if (!currentLogFilePath) {
-                NSLogError(@"DDFileLogger: Failed to create new log file: %@", error);
+                NSLogError(@"MSDDFileLogger: Failed to create new log file: %@", error);
             }
         } else {
             #pragma clang diagnostic push
@@ -1064,13 +1064,13 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
             #pragma clang diagnostic pop
         }
         // Use static factory method here, since it checks for nil (and is unavailable to Swift).
-        _currentLogFileInfo = [DDLogFileInfo logFileWithPath:currentLogFilePath];
+        _currentLogFileInfo = [MSDDLogFileInfo logFileWithPath:currentLogFilePath];
     }
 
     return _currentLogFileInfo;
 }
 
-- (BOOL)lt_shouldUseLogFile:(nonnull DDLogFileInfo *)logFileInfo isResuming:(BOOL)isResuming {
+- (BOOL)lt_shouldUseLogFile:(nonnull MSDDLogFileInfo *)logFileInfo isResuming:(BOOL)isResuming {
     NSAssert([self isOnInternalLoggerQueue], @"lt_ methods should be on logger queue.");
     NSParameterAssert(logFileInfo);
 
@@ -1121,7 +1121,7 @@ NSTimeInterval     const kDDRollingLeeway              = 1.0;              // 1s
 
     __weak __auto_type weakSelf = self;
     dispatch_source_set_event_handler(_currentLogFileVnode, ^{ @autoreleasepool {
-        NSLogInfo(@"DDFileLogger: Current logfile was moved. Rolling it and creating a new one");
+        NSLogInfo(@"MSDDFileLogger: Current logfile was moved. Rolling it and creating a new one");
         [weakSelf lt_rollLogFileNow];
     } });
 
@@ -1172,15 +1172,15 @@ static int exception_count = 0;
     [self lt_logData:data];
 }
 
-- (void)willLogMessage:(DDLogFileInfo *)logFileInfo {
+- (void)willLogMessage:(MSDDLogFileInfo *)logFileInfo {
 
 }
 
-- (void)didLogMessage:(DDLogFileInfo *)logFileInfo {
+- (void)didLogMessage:(MSDDLogFileInfo *)logFileInfo {
     [self lt_maybeRollLogFileDueToSize];
 }
 
-- (BOOL)shouldArchiveRecentLogFileInfo:(__unused DDLogFileInfo *)recentLogFileInfo {
+- (BOOL)shouldArchiveRecentLogFileInfo:(__unused MSDDLogFileInfo *)recentLogFileInfo {
     return NO;
 }
 
@@ -1218,13 +1218,13 @@ static int exception_count = 0;
     [_currentLogFileHandle synchronizeFile];
 }
 
-- (DDLoggerName)loggerName {
-    return DDLoggerNameFile;
+- (MSDDLoggerName)loggerName {
+    return MSDDLoggerNameFile;
 }
 
 @end
 
-@implementation DDFileLogger (Internal)
+@implementation MSDDFileLogger (Internal)
 
 - (void)logData:(NSData *)data {
     // This method is public.
@@ -1311,10 +1311,10 @@ static int exception_count = 0;
         exception_count++;
 
         if (exception_count <= 10) {
-            NSLogError(@"DDFileLogger.logMessage: %@", exception);
+            NSLogError(@"MSDDFileLogger.logMessage: %@", exception);
 
             if (exception_count == 10) {
-                NSLogError(@"DDFileLogger.logMessage: Too many exceptions -- will not log any more of them.");
+                NSLogError(@"MSDDFileLogger.logMessage: Too many exceptions -- will not log any more of them.");
             }
         }
     }
@@ -1349,9 +1349,9 @@ static int exception_count = 0;
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static NSString * const kDDXAttrArchivedName = @"lumberjack.log.archived";
+static NSString * const kDDXAttrArchivedName = @"msxf.lumberjack.log.archived";
 
-@interface DDLogFileInfo () {
+@interface MSDDLogFileInfo () {
     __strong NSString *_filePath;
     __strong NSString *_fileName;
 
@@ -1375,7 +1375,7 @@ static NSString * const kDDXAttrArchivedName = @"lumberjack.log.archived";
 @end
 
 
-@implementation DDLogFileInfo
+@implementation MSDDLogFileInfo
 
 @synthesize filePath;
 
@@ -1708,7 +1708,7 @@ static NSString *_xattrToExtensionName(NSString *attrName) {
 
 - (BOOL)isEqual:(id)object {
     if ([object isKindOfClass:[self class]]) {
-        DDLogFileInfo *another = (DDLogFileInfo *)object;
+        MSDDLogFileInfo *another = (MSDDLogFileInfo *)object;
 
         return [filePath isEqualToString:[another filePath]];
     }
@@ -1720,13 +1720,13 @@ static NSString *_xattrToExtensionName(NSString *attrName) {
     return [filePath hash];
 }
 
-- (NSComparisonResult)reverseCompareByCreationDate:(DDLogFileInfo *)another {
+- (NSComparisonResult)reverseCompareByCreationDate:(MSDDLogFileInfo *)another {
     __auto_type us = [self creationDate];
     __auto_type them = [another creationDate];
     return [them compare:us];
 }
 
-- (NSComparisonResult)reverseCompareByModificationDate:(DDLogFileInfo *)another {
+- (NSComparisonResult)reverseCompareByModificationDate:(MSDDLogFileInfo *)another {
     __auto_type us = [self modificationDate];
     __auto_type them = [another modificationDate];
     return [them compare:us];

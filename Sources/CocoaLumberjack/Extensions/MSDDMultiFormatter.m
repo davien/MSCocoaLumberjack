@@ -17,9 +17,9 @@
 #error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
 #endif
 
-#import <CocoaLumberjack/DDMultiFormatter.h>
+#import <CocoaLumberjack/MSDDMultiFormatter.h>
 
-@interface DDMultiFormatter () {
+@interface MSDDMultiFormatter () {
     dispatch_queue_t _queue;
     NSMutableArray *_formatters;
 }
@@ -29,7 +29,7 @@
 @end
 
 
-@implementation DDMultiFormatter
+@implementation MSDDMultiFormatter
 
 - (instancetype)init {
     self = [super init];

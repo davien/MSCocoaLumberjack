@@ -20,7 +20,7 @@
 #include <notify_keys.h>
 #include <sys/time.h>
 
-#import <CocoaLumberjack/DDASLLogCapture.h>
+#import <CocoaLumberjack/MSDDASLLogCapture.h>
 
 // Disable legacy macros
 #ifndef MSDD_LEGACY_MACROS
@@ -32,7 +32,7 @@ static MSDDLogLevel _captureLevel = MSDDLogLevelVerbose;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
-@implementation DDASLLogCapture
+@implementation MSDDASLLogCapture
 #pragma clang diagnostic pop
 
 + (void)start {
@@ -68,7 +68,7 @@ static MSDDLogLevel _captureLevel = MSDDLogLevelVerbose;
     asl_set_query(query, ASL_KEY_LEVEL, param, ASL_QUERY_OP_LESS_EQUAL | ASL_QUERY_OP_NUMERIC);
 
     // Don't retrieve logs from our own DDASLLogger
-    asl_set_query(query, kDDASLKeyDDLog, kDDASLDDLogValue, ASL_QUERY_OP_NOT_EQUAL);
+    asl_set_query(query, kMSDDASLKeyDDLog, kMSDDASLDDLogValue, ASL_QUERY_OP_NOT_EQUAL);
     
 #if !TARGET_OS_IPHONE || (defined(TARGET_SIMULATOR) && TARGET_SIMULATOR)
     int processId = [[NSProcessInfo processInfo] processIdentifier];
@@ -119,7 +119,7 @@ static MSDDLogLevel _captureLevel = MSDDLogLevelVerbose;
                                                                level:_captureLevel
                                                                 flag:flag
                                                              context:0
-                                                                file:@"DDASLLogCapture"
+                                                                file:@"MSDDASLLogCapture"
                                                             function:nil
                                                                 line:0
                                                                  tag:nil

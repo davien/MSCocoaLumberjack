@@ -19,7 +19,7 @@
 
 #import <pthread/pthread.h>
 
-#import <CocoaLumberjack/DDContextFilterLogFormatter.h>
+#import <CocoaLumberjack/MSDDContextFilterLogFormatter.h>
 
 @interface DDLoggingContextSet : NSObject
 
@@ -36,13 +36,13 @@
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDContextWhitelistFilterLogFormatter () {
+@interface MSDDContextWhitelistFilterLogFormatter () {
     DDLoggingContextSet *_contextSet;
 }
 @end
 
 
-@implementation DDContextWhitelistFilterLogFormatter
+@implementation MSDDContextWhitelistFilterLogFormatter
 
 - (instancetype)init {
     if ((self = [super init])) {
@@ -82,14 +82,14 @@
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDContextBlacklistFilterLogFormatter () {
+@interface MSDDContextBlacklistFilterLogFormatter () {
     DDLoggingContextSet *_contextSet;
 }
 
 @end
 
 
-@implementation DDContextBlacklistFilterLogFormatter
+@implementation MSDDContextBlacklistFilterLogFormatter
 
 - (instancetype)init {
     if ((self = [super init])) {

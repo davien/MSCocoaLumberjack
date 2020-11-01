@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  * All that is needed for a concrete database logger is to extend this class
  * and override the methods in the implementation file that are prefixed with "db_".
  **/
-@interface DDAbstractDatabaseLogger : MSDDAbstractLogger {
+@interface MSDDAbstractDatabaseLogger : MSDDAbstractLogger {
     
 @protected
     NSUInteger _saveThreshold;

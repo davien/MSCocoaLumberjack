@@ -20,7 +20,7 @@
 
 #import <CocoaLumberjack/MSDDLog.h>
 
-#define LOG_CONTEXT_ALL INT_MAX
+#define MSLOG_CONTEXT_ALL INT_MAX
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
@@ -58,12 +58,12 @@ NS_ASSUME_NONNULL_BEGIN
  * However, if you instead choose to use file logging (for faster performance),
  * you may choose to use only a file logger and a tty logger.
  **/
-@interface DDTTYLogger : MSDDAbstractLogger <MSDDLogger>
+@interface MSDDTTYLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
- *  Singleton instance. Returns `nil` if the initialization of the DDTTYLogger fails.
+ *  Singleton instance. Returns `nil` if the initialization of the MSDDTTYLogger fails.
  */
-@property (nonatomic, class, readonly, strong, nullable) DDTTYLogger *sharedInstance;
+@property (nonatomic, class, readonly, strong, nullable) MSDDTTYLogger *sharedInstance;
 
 /* Inherited from the DDLogger protocol:
  *
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite, assign) BOOL automaticallyAppendNewlineForCustomFormatters;
 
 /**
- Using this initializer is not supported. Please use `DDTTYLogger.sharedInstance`.
+ Using this initializer is not supported. Please use `MSDDTTYLogger.sharedInstance`.
  **/
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -126,10 +126,10 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * If you run the application within Xcode, then the XcodeColors plugin is required.
  *
- * If you run the application from a shell, then DDTTYLogger will automatically map the given color to
+ * If you run the application from a shell, then MSDDTTYLogger will automatically map the given color to
  * the closest available color. (xterm-256color or xterm-color which have 256 and 16 supported colors respectively.)
  *
- * This method invokes setForegroundColor:backgroundColor:forFlag:context: and applies it to `LOG_CONTEXT_ALL`.
+ * This method invokes setForegroundColor:backgroundColor:forFlag:context: and applies it to `MSLOG_CONTEXT_ALL`.
  **/
 - (void)setForegroundColor:(nullable DDColor *)txtColor backgroundColor:(nullable DDColor *)bgColor forFlag:(MSDDLogFlag)mask;
 
@@ -139,7 +139,7 @@ NS_ASSUME_NONNULL_BEGIN
  * A logging context is often used to identify log messages coming from a 3rd party framework,
  * although logging context's can be used for many different functions.
  *
- * Use LOG_CONTEXT_ALL to set the default color for all contexts that have no specific color set defined.
+ * Use MSLOG_CONTEXT_ALL to set the default color for all contexts that have no specific color set defined.
  *
  * Logging context's are explained in further detail here:
  * Documentation/CustomContext.md
@@ -162,8 +162,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * Note: For CLI OS X projects that don't link with AppKit use CLIColor objects instead
  *
- * [[DDTTYLogger sharedInstance] setForegroundColor:purple backgroundColor:nil forTag:PurpleTag];
- * [DDLog addLogger:[DDTTYLogger sharedInstance]];
+ * [[MSDDTTYLogger sharedInstance] setForegroundColor:purple backgroundColor:nil forTag:PurpleTag];
+ * [DDLog addLogger:[MSDDTTYLogger sharedInstance]];
  *
  * This would essentially give you a straight NSLog replacement that prints in purple:
  *

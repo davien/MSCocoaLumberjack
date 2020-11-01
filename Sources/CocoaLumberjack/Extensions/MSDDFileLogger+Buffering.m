@@ -15,8 +15,8 @@
 
 #import <sys/mount.h>
 
-#import <CocoaLumberjack/DDFileLogger+Buffering.h>
-#import "../DDFileLogger+Internal.h"
+#import <CocoaLumberjack/MSDDFileLogger+Buffering.h>
+#import "../MSDDFileLogger+Internal.h"
 
 static const NSUInteger kDDDefaultBufferSize = 4096; // 4 kB, block f_bsize on iphone7
 static const NSUInteger kDDMaxBufferSize = 1048576; // ~1 mB, f_iosize on iphone7
@@ -61,7 +61,7 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
 
 @interface DDBufferedProxy : NSProxy
 
-@property (nonatomic) DDFileLogger *fileLogger;
+@property (nonatomic) MSDDFileLogger *fileLogger;
 @property (nonatomic) NSOutputStream *buffer;
 
 @property (nonatomic) NSUInteger maxBufferSizeBytes;
@@ -71,7 +71,7 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
 
 @implementation DDBufferedProxy
 
-- (instancetype)initWithFileLogger:(DDFileLogger *)fileLogger {
+- (instancetype)initWithFileLogger:(MSDDFileLogger *)fileLogger {
     _fileLogger = fileLogger;
     _maxBufferSizeBytes = DDGetDefaultBufferSizeBytes();
     [self flushBuffer];
@@ -167,12 +167,12 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
 
 #pragma mark - Wrapping
 
-- (DDFileLogger *)wrapWithBuffer {
-    return (DDFileLogger *)self;
+- (MSDDFileLogger *)wrapWithBuffer {
+    return (MSDDFileLogger *)self;
 }
 
-- (DDFileLogger *)unwrapFromBuffer {
-    return (DDFileLogger *)self.fileLogger;
+- (MSDDFileLogger *)unwrapFromBuffer {
+    return (MSDDFileLogger *)self.fileLogger;
 }
 
 #pragma mark - NSProxy
@@ -191,10 +191,10 @@ static NSUInteger DDGetDefaultBufferSizeBytes() {
 
 @end
 
-@implementation DDFileLogger (Buffering)
+@implementation MSDDFileLogger (Buffering)
 
 - (instancetype)wrapWithBuffer {
-    return (DDFileLogger *)[[DDBufferedProxy alloc] initWithFileLogger:self];
+    return (MSDDFileLogger *)[[DDBufferedProxy alloc] initWithFileLogger:self];
 }
 
 - (instancetype)unwrapFromBuffer {

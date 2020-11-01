@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
  * This formatter can be used to chain different formatters together.
  * The log message will processed in the order of the formatters added.
  **/
-@interface DDMultiFormatter : NSObject <MSDDLogFormatter>
+@interface MSDDMultiFormatter : NSObject <MSDDLogFormatter>
 
 /**
  *  Array of chained formatters

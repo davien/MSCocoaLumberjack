@@ -25,10 +25,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 // Custom key set on messages sent to ASL
-extern const char* const kDDASLKeyDDLog;
+extern const char* const kMSDDASLKeyDDLog;
 
 // Value set for kDDASLKeyDDLog
-extern const char* const kDDASLDDLogValue;
+extern const char* const kMSDDASLDDLogValue;
 
 /**
  * This class provides a logger for the Apple System Log facility.
@@ -43,15 +43,15 @@ extern const char* const kDDASLDDLogValue;
  * However, if you instead choose to use file logging (for faster performance),
  * you may choose to use a file logger and a tty logger.
  **/
-API_DEPRECATED("Use DDOSLogger instead", macosx(10.4,10.12), ios(2.0,10.0), watchos(2.0,3.0), tvos(9.0,10.0))
-@interface DDASLLogger : MSDDAbstractLogger <MSDDLogger>
+API_DEPRECATED("Use MSDDOSLogger instead", macosx(10.4,10.12), ios(2.0,10.0), watchos(2.0,3.0), tvos(9.0,10.0))
+@interface MSDDASLLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Singleton method
  *
  *  @return the shared instance
  */
-@property (nonatomic, class, readonly, strong) DDASLLogger *sharedInstance;
+@property (nonatomic, class, readonly, strong) MSDDASLLogger *sharedInstance;
 
 // Inherited from DDAbstractLogger
 

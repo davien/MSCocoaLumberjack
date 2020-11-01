@@ -16,13 +16,13 @@
 #import <Foundation/Foundation.h>
 
 // The Swift Package integration has no support for the legacy macros.
-#if __has_include(<CocoaLumberjack/DDLegacyMacros.h>)
+#if __has_include(<CocoaLumberjack/MSDDLegacyMacros.h>)
     // Enable 1.9.x legacy macros if imported directly and it's not a swift package build.
     #ifndef MSDD_LEGACY_MACROS
         #define MSDD_LEGACY_MACROS 1
     #endif
     // MSDD_LEGACY_MACROS is checked in the file itself
-    #import <CocoaLumberjack/DDLegacyMacros.h>
+    #import <CocoaLumberjack/MSDDLegacyMacros.h>
 #endif
 
 #ifndef MSDD_LEGACY_MESSAGE_TAG
@@ -30,7 +30,7 @@
 #endif
 
 // Names of loggers.
-#import <CocoaLumberjack/DDLoggerNames.h>
+#import <CocoaLumberjack/MSDDLoggerNames.h>
 
 #if OS_OBJECT_USE_OBJC
     #define MSDISPATCH_QUEUE_REFERENCE_TYPE strong
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * static const DDLogLevel ddLogLevel = DDLogFlagError | DDLogFlagInfo;
  *
- * When LOG_LEVEL_DEF is defined as ddLogLevel.
+ * When MSLOG_LEVEL_DEF is defined as ddLogLevel.
  *
  * Flags may also be consulted when writing custom log formatters,
  * as the DDLogMessage class captures the individual flag that caused the log message to fire.
@@ -84,7 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * if (LOG_VERBOSE) {
  *     for (id sprocket in sprockets)
- *         DDLogVerbose(@"sprocket: %@", [sprocket description])
+ *         MSDDLogVerbose(@"sprocket: %@", [sprocket description])
  * }
  *
  * -- Async --
@@ -193,14 +193,14 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
  * The MSTHIS_FILE macro gives you an NSString of the file name.
  * For simplicity and clarity, the file name does not include the full path or file extension.
  *
- * For example: DDLogWarn(@"%@: Unable to find thingy", MSTHIS_FILE) -> @"MyViewController: Unable to find thingy"
+ * For example: MSDDLogWarn(@"%@: Unable to find thingy", MSTHIS_FILE) -> @"MyViewController: Unable to find thingy"
  **/
 #define MSTHIS_FILE         (MSDDExtractFileNameWithoutExtension(__FILE__, NO))
 
 /**
  * The MSTHIS_METHOD macro gives you the name of the current objective-c method.
  *
- * For example: DDLogWarn(@"%@ - Requires non-nil strings", MSTHIS_METHOD) -> @"setMake:model: requires non-nil strings"
+ * For example: MSDDLogWarn(@"%@ - Requires non-nil strings", MSTHIS_METHOD) -> @"setMake:model: requires non-nil strings"
  *
  * Note: This does NOT work in straight C functions (non objective-c).
  * Instead you should use the predefined __FUNCTION__ macro.
@@ -214,7 +214,7 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
 
 /**
  *  The main class, exposes all logging mechanisms, loggers, ...
- *  For most of the users, this class is hidden behind the logging functions like `DDLogInfo`
+ *  For most of the users, this class is hidden behind the logging functions like `MSDDLogInfo`
  */
 @interface MSDDLog : NSObject
 
@@ -413,8 +413,8 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
  * `[DDLog addLogger:consoleLogger withLogLevel:DDLogLevelVerbose];`
  * `[DDLog addLogger:fileLogger    withLogLevel:DDLogLevelWarning];`
  *
- * `DDLogError(@"oh no");` => gets forwarded to consoleLogger & fileLogger
- * `DDLogInfo(@"hi");`     => gets forwarded to consoleLogger only
+ * `MSDDLogError(@"oh no");` => gets forwarded to consoleLogger & fileLogger
+ * `MSDDLogInfo(@"hi");`     => gets forwarded to consoleLogger only
  *
  * It is important to remember that Lumberjack uses a BITMASK.
  * Many developers & third party frameworks may define extra log levels & flags.
@@ -451,8 +451,8 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
  * `[DDLog addLogger:consoleLogger withLogLevel:DDLogLevelVerbose];`
  * `[DDLog addLogger:fileLogger    withLogLevel:DDLogLevelWarning];`
  *
- * `DDLogError(@"oh no");` => gets forwarded to consoleLogger & fileLogger
- * `DDLogInfo(@"hi");`     => gets forwarded to consoleLogger only
+ * `MSDDLogError(@"oh no");` => gets forwarded to consoleLogger & fileLogger
+ * `MSDDLogInfo(@"hi");`     => gets forwarded to consoleLogger only
  *
  * It is important to remember that Lumberjack uses a BITMASK.
  * Many developers & third party frameworks may define extra log levels & flags.
@@ -645,7 +645,7 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
  * The created queue will receive its name from this method.
  * This may be helpful for debugging or profiling reasons.
  **/
-@property (copy, nonatomic, readonly) DDLoggerName loggerName;
+@property (copy, nonatomic, readonly) MSDDLoggerName loggerName;
 
 @end
 

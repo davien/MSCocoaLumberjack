@@ -15,9 +15,9 @@
 
 #import <os/log.h>
 
-#import <CocoaLumberjack/DDOSLogger.h>
+#import <CocoaLumberjack/MSDDOSLogger.h>
 
-@interface DDOSLogger () {
+@interface MSDDOSLogger () {
     NSString *_subsystem;
     NSString *_category;
 }
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation DDOSLogger
+@implementation MSDDOSLogger
 
 @synthesize subsystem = _subsystem;
 @synthesize category = _category;
@@ -48,7 +48,7 @@
     return self;
 }
 
-static DDOSLogger *sharedInstance;
+static MSDDOSLogger *sharedInstance;
 
 - (instancetype)init {
     return [self initWithSubsystem:nil category:nil];
@@ -82,13 +82,13 @@ static DDOSLogger *sharedInstance;
 
 #pragma mark - DDLogger
 
-- (DDLoggerName)loggerName {
-    return DDLoggerNameOS;
+- (MSDDLoggerName)loggerName {
+    return MSDDLoggerNameOS;
 }
 
 - (void)logMessage:(MSDDLogMessage *)logMessage {
     // Skip captured log messages
-    if ([logMessage->_fileName isEqualToString:@"DDASLLogCapture"]) {
+    if ([logMessage->_fileName isEqualToString:@"MSDDASLLogCapture"]) {
         return;
     }
 

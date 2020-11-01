@@ -17,9 +17,9 @@
 #error This file must be compiled with ARC. Use -fobjc-arc flag (or convert project to ARC).
 #endif
 
-#import <CocoaLumberjack/DDAbstractDatabaseLogger.h>
+#import <CocoaLumberjack/MSDDAbstractDatabaseLogger.h>
 
-@interface DDAbstractDatabaseLogger ()
+@interface MSDDAbstractDatabaseLogger ()
 
 - (void)destroySaveTimer;
 - (void)updateAndResumeSaveTimer;
@@ -32,7 +32,7 @@
 
 #pragma mark -
 
-@implementation DDAbstractDatabaseLogger
+@implementation MSDDAbstractDatabaseLogger
 
 - (instancetype)init {
     if ((self = [super init])) {

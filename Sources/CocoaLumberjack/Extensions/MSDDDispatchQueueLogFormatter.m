@@ -21,29 +21,29 @@
 #import <stdatomic.h>
 #import <sys/qos.h>
 
-#import <CocoaLumberjack/DDDispatchQueueLogFormatter.h>
+#import <CocoaLumberjack/MSDDDispatchQueueLogFormatter.h>
 
-DDQualityOfServiceName const DDQualityOfServiceUserInteractive = @"UI";
-DDQualityOfServiceName const DDQualityOfServiceUserInitiated   = @"IN";
-DDQualityOfServiceName const DDQualityOfServiceDefault         = @"DF";
-DDQualityOfServiceName const DDQualityOfServiceUtility         = @"UT";
-DDQualityOfServiceName const DDQualityOfServiceBackground      = @"BG";
-DDQualityOfServiceName const DDQualityOfServiceUnspecified     = @"UN";
+MSDDQualityOfServiceName const MSDDQualityOfServiceUserInteractive = @"UI";
+MSDDQualityOfServiceName const MSDDQualityOfServiceUserInitiated   = @"IN";
+MSDDQualityOfServiceName const MSDDQualityOfServiceDefault         = @"DF";
+MSDDQualityOfServiceName const MSDDQualityOfServiceUtility         = @"UT";
+MSDDQualityOfServiceName const MSDDQualityOfServiceBackground      = @"BG";
+MSDDQualityOfServiceName const MSDDQualityOfServiceUnspecified     = @"UN";
 
-static DDQualityOfServiceName _qos_name(NSUInteger qos) {
+static MSDDQualityOfServiceName _qos_name(NSUInteger qos) {
     switch ((qos_class_t) qos) {
-        case QOS_CLASS_USER_INTERACTIVE: return DDQualityOfServiceUserInteractive;
-        case QOS_CLASS_USER_INITIATED:   return DDQualityOfServiceUserInitiated;
-        case QOS_CLASS_DEFAULT:          return DDQualityOfServiceDefault;
-        case QOS_CLASS_UTILITY:          return DDQualityOfServiceUtility;
-        case QOS_CLASS_BACKGROUND:       return DDQualityOfServiceBackground;
-        default:                         return DDQualityOfServiceUnspecified;
+        case QOS_CLASS_USER_INTERACTIVE: return MSDDQualityOfServiceUserInteractive;
+        case QOS_CLASS_USER_INITIATED:   return MSDDQualityOfServiceUserInitiated;
+        case QOS_CLASS_DEFAULT:          return MSDDQualityOfServiceDefault;
+        case QOS_CLASS_UTILITY:          return MSDDQualityOfServiceUtility;
+        case QOS_CLASS_BACKGROUND:       return MSDDQualityOfServiceBackground;
+        default:                         return MSDDQualityOfServiceUnspecified;
     }
 }
 
-#pragma mark - DDDispatchQueueLogFormatter
+#pragma mark - MSDDDispatchQueueLogFormatter
 
-@interface DDDispatchQueueLogFormatter () {
+@interface MSDDDispatchQueueLogFormatter () {
     NSDateFormatter *_dateFormatter;      // Use [self stringFromDate]
 
     pthread_mutex_t _mutex;
@@ -55,7 +55,7 @@ static DDQualityOfServiceName _qos_name(NSUInteger qos) {
 @end
 
 
-@implementation DDDispatchQueueLogFormatter
+@implementation MSDDDispatchQueueLogFormatter
 
 - (instancetype)init {
     if ((self = [super init])) {
@@ -71,7 +71,7 @@ static DDQualityOfServiceName _qos_name(NSUInteger qos) {
     return self;
 }
 
-- (instancetype)initWithMode:(DDDispatchQueueLogFormatterMode)mode {
+- (instancetype)initWithMode:(MSDDDispatchQueueLogFormatterMode)mode {
     return [self init];
 }
 
@@ -233,16 +233,16 @@ static DDQualityOfServiceName _qos_name(NSUInteger qos) {
 
 @end
 
-#pragma mark - DDAtomicCounter
+#pragma mark - MSDDAtomicCounter
 
-@interface DDAtomicCounter() {
+@interface MSDDAtomicCounter() {
     atomic_int_fast32_t _value;
 }
 @end
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
-@implementation DDAtomicCounter
+@implementation MSDDAtomicCounter
 #pragma clang diagnostic pop
 
 - (instancetype)initWithDefaultValue:(int32_t)defaultValue {

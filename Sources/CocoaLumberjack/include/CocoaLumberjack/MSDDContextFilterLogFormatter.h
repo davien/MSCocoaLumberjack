@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  * For example, logically separate parts of your app each have a different logging context.
  * Also 3rd party frameworks that make use of Lumberjack generally use their own dedicated logging context.
  **/
-@interface DDContextWhitelistFilterLogFormatter : NSObject <MSDDLogFormatter>
+@interface MSDDContextWhitelistFilterLogFormatter : NSObject <MSDDLogFormatter>
 
 /**
  *  Designated default initializer
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * This class provides a log formatter that filters log statements from a logging context on the blacklist.
  **/
-@interface DDContextBlacklistFilterLogFormatter : NSObject <MSDDLogFormatter>
+@interface MSDDContextBlacklistFilterLogFormatter : NSObject <MSDDLogFormatter>
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 

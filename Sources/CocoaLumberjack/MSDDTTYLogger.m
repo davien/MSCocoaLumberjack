@@ -19,7 +19,7 @@
 
 #import <sys/uio.h>
 
-#import <CocoaLumberjack/DDTTYLogger.h>
+#import <CocoaLumberjack/MSDDTTYLogger.h>
 
 // We probably shouldn't be using DDLog() statements within the DDLog implementation.
 // But we still want to leave our log statements for any future debugging,
@@ -28,15 +28,15 @@
 // So we use primitive logging macros around NSLog.
 // We maintain the NS prefix on the macros to be explicit about the fact that we're using NSLog.
 
-#ifndef DD_NSLOG_LEVEL
-    #define DD_NSLOG_LEVEL 2
+#ifndef MSDD_NSLOG_LEVEL
+    #define MSDD_NSLOG_LEVEL 2
 #endif
 
-#define NSLogError(frmt, ...)    do{ if(DD_NSLOG_LEVEL >= 1) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogWarn(frmt, ...)     do{ if(DD_NSLOG_LEVEL >= 2) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogInfo(frmt, ...)     do{ if(DD_NSLOG_LEVEL >= 3) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogDebug(frmt, ...)    do{ if(DD_NSLOG_LEVEL >= 4) NSLog((frmt), ##__VA_ARGS__); } while(0)
-#define NSLogVerbose(frmt, ...)  do{ if(DD_NSLOG_LEVEL >= 5) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogError(frmt, ...)    do{ if(MSDD_NSLOG_LEVEL >= 1) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogWarn(frmt, ...)     do{ if(MSDD_NSLOG_LEVEL >= 2) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogInfo(frmt, ...)     do{ if(MSDD_NSLOG_LEVEL >= 3) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogDebug(frmt, ...)    do{ if(MSDD_NSLOG_LEVEL >= 4) NSLog((frmt), ##__VA_ARGS__); } while(0)
+#define NSLogVerbose(frmt, ...)  do{ if(MSDD_NSLOG_LEVEL >= 5) NSLog((frmt), ##__VA_ARGS__); } while(0)
 
 // Xcode does NOT natively support colors in the Xcode debugging console.
 // You'll need to install the XcodeColors plugin to see colors in the Xcode console.
@@ -121,7 +121,7 @@ typedef struct {
 #pragma mark -
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface DDTTYLogger () {
+@interface MSDDTTYLogger () {
     NSString *_appName;
     char *_app;
     size_t _appLen;
@@ -138,7 +138,7 @@ typedef struct {
 @end
 
 
-@implementation DDTTYLogger
+@implementation MSDDTTYLogger
 
 static BOOL isaColorTTY;
 static BOOL isaColor256TTY;
@@ -148,7 +148,7 @@ static NSArray *codes_fg = nil;
 static NSArray *codes_bg = nil;
 static NSArray *colors   = nil;
 
-static DDTTYLogger *sharedInstance;
+static MSDDTTYLogger *sharedInstance;
 
 /**
  * Initializes the colors array, as well as the codes_fg and codes_bg arrays, for 16 color mode.
@@ -774,14 +774,14 @@ static DDTTYLogger *sharedInstance;
         CGFloat distance = sqrtf(powf(r - inR, 2.0f) + powf(g - inG, 2.0f) + powf(b - inB, 2.0f));
     #endif
 
-        NSLogVerbose(@"DDTTYLogger: %3lu : %.3f,%.3f,%.3f & %.3f,%.3f,%.3f = %.6f",
+        NSLogVerbose(@"MSDDTTYLogger: %3lu : %.3f,%.3f,%.3f & %.3f,%.3f,%.3f = %.6f",
                      (unsigned long)i, inR, inG, inB, r, g, b, distance);
 
         if (distance < lowestDistance) {
             bestIndex = i;
             lowestDistance = distance;
 
-            NSLogVerbose(@"DDTTYLogger: New best index = %lu", (unsigned long)bestIndex);
+            NSLogVerbose(@"MSDDTTYLogger: New best index = %lu", (unsigned long)bestIndex);
         }
 
         i++;
@@ -817,9 +817,9 @@ static DDTTYLogger *sharedInstance;
             }
         }
 
-        NSLogInfo(@"DDTTYLogger: isaColorTTY = %@", (isaColorTTY ? @"YES" : @"NO"));
-        NSLogInfo(@"DDTTYLogger: isaColor256TTY: %@", (isaColor256TTY ? @"YES" : @"NO"));
-        NSLogInfo(@"DDTTYLogger: isaXcodeColorTTY: %@", (isaXcodeColorTTY ? @"YES" : @"NO"));
+        NSLogInfo(@"MSDDTTYLogger: isaColorTTY = %@", (isaColorTTY ? @"YES" : @"NO"));
+        NSLogInfo(@"MSDDTTYLogger: isaColor256TTY: %@", (isaColor256TTY ? @"YES" : @"NO"));
+        NSLogInfo(@"MSDDTTYLogger: isaXcodeColorTTY: %@", (isaXcodeColorTTY ? @"YES" : @"NO"));
 
         sharedInstance = [[self alloc] init];
     });
@@ -833,7 +833,7 @@ static DDTTYLogger *sharedInstance;
     }
 
     if (@available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *)) {
-        NSLogWarn(@"CocoaLumberjack: Warning: Usage of DDTTYLogger detected when DDOSLogger is available and can be used! Please consider migrating to DDOSLogger.");
+        NSLogWarn(@"CocoaLumberjack: Warning: Usage of MSDDTTYLogger detected when MSDDOSLogger is available and can be used! Please consider migrating to MSDDOSLogger.");
     }
 
     if ((self = [super init])) {
@@ -893,8 +893,8 @@ static DDTTYLogger *sharedInstance;
     return self;
 }
 
-- (DDLoggerName)loggerName {
-    return DDLoggerNameTTY;
+- (MSDDLoggerName)loggerName {
+    return MSDDLoggerNameTTY;
 }
 
 - (void)loadDefaultColorProfiles {
@@ -961,7 +961,7 @@ static DDTTYLogger *sharedInstance;
 }
 
 - (void)setForegroundColor:(DDColor *)txtColor backgroundColor:(DDColor *)bgColor forFlag:(MSDDLogFlag)mask {
-    [self setForegroundColor:txtColor backgroundColor:bgColor forFlag:mask context:LOG_CONTEXT_ALL];
+    [self setForegroundColor:txtColor backgroundColor:bgColor forFlag:mask context:MSLOG_CONTEXT_ALL];
 }
 
 - (void)setForegroundColor:(DDColor *)txtColor backgroundColor:(DDColor *)bgColor forFlag:(MSDDLogFlag)mask context:(NSInteger)ctxt {
@@ -973,7 +973,7 @@ static DDTTYLogger *sharedInstance;
                                                                     flag:mask
                                                                  context:ctxt];
 
-            NSLogInfo(@"DDTTYLogger: newColorProfile: %@", newColorProfile);
+            NSLogInfo(@"MSDDTTYLogger: newColorProfile: %@", newColorProfile);
 
             NSUInteger i = 0;
 
@@ -1019,7 +1019,7 @@ static DDTTYLogger *sharedInstance;
                                                                     flag:(MSDDLogFlag)0
                                                                  context:0];
 
-            NSLogInfo(@"DDTTYLogger: newColorProfile: %@", newColorProfile);
+            NSLogInfo(@"MSDDTTYLogger: newColorProfile: %@", newColorProfile);
 
             self->_colorProfilesDict[tag] = newColorProfile;
         }
@@ -1199,8 +1199,8 @@ static DDTTYLogger *sharedInstance;
                             break;
                         }
 
-                        // Check if LOG_CONTEXT_ALL was specified as a default color for this flag
-                        if (cp->context == LOG_CONTEXT_ALL) {
+                        // Check if MSLOG_CONTEXT_ALL was specified as a default color for this flag
+                        if (cp->context == MSLOG_CONTEXT_ALL) {
                             colorProfile = cp;
 
                             // We don't break to keep searching for more specific color profiles for the context
@@ -1389,7 +1389,7 @@ static DDTTYLogger *sharedInstance;
         CGFloat r, g, b;
 
         if (fgColor) {
-            [DDTTYLogger getRed:&r green:&g blue:&b fromColor:fgColor];
+            [MSDDTTYLogger getRed:&r green:&g blue:&b fromColor:fgColor];
 
             fg_r = (uint8_t)(r * 255.0f);
             fg_g = (uint8_t)(g * 255.0f);
@@ -1397,7 +1397,7 @@ static DDTTYLogger *sharedInstance;
         }
 
         if (bgColor) {
-            [DDTTYLogger getRed:&r green:&g blue:&b fromColor:bgColor];
+            [MSDDTTYLogger getRed:&r green:&g blue:&b fromColor:bgColor];
 
             bg_r = (uint8_t)(r * 255.0f);
             bg_g = (uint8_t)(g * 255.0f);
@@ -1407,7 +1407,7 @@ static DDTTYLogger *sharedInstance;
         if (fgColor && isaColorTTY) {
             // Map foreground color to closest available shell color
 
-            fgCodeIndex = [DDTTYLogger codeIndexForColor:fgColor];
+            fgCodeIndex = [MSDDTTYLogger codeIndexForColor:fgColor];
             fgCodeRaw   = codes_fg[fgCodeIndex];
 
             NSString *escapeSeq = @"\033[";
@@ -1440,7 +1440,7 @@ static DDTTYLogger *sharedInstance;
         if (bgColor && isaColorTTY) {
             // Map background color to closest available shell color
 
-            bgCodeIndex = [DDTTYLogger codeIndexForColor:bgColor];
+            bgCodeIndex = [MSDDTTYLogger codeIndexForColor:bgColor];
             bgCodeRaw   = codes_bg[bgCodeIndex];
 
             NSString *escapeSeq = @"\033[";

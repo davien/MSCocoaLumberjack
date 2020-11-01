@@ -13,9 +13,9 @@
 //   to endorse or promote products derived from this software without specific
 //   prior written permission of Deusty, LLC.
 
-#import <CocoaLumberjack/DDLoggerNames.h>
+#import <CocoaLumberjack/MSDDLoggerNames.h>
 
-DDLoggerName const DDLoggerNameASL    = @"cocoa.msxf.lumberjack.aslLogger";
-DDLoggerName const DDLoggerNameTTY    = @"cocoa.msxf.lumberjack.ttyLogger";
-DDLoggerName const DDLoggerNameOS     = @"cocoa.msxf.lumberjack.osLogger";
-DDLoggerName const DDLoggerNameFile   = @"cocoa.msxf.lumberjack.fileLogger";
+MSDDLoggerName const MSDDLoggerNameASL    = @"cocoa.msxf.lumberjack.aslLogger";
+MSDDLoggerName const MSDDLoggerNameTTY    = @"cocoa.msxf.lumberjack.ttyLogger";
+MSDDLoggerName const MSDDLoggerNameOS     = @"cocoa.msxf.lumberjack.osLogger";
+MSDDLoggerName const MSDDLoggerNameFile   = @"cocoa.msxf.lumberjack.fileLogger";

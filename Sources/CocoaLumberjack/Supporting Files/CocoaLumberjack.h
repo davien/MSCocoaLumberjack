@@ -38,10 +38,10 @@
  *
  * Step 2 [3rd party frameworks]:
  *
- * Define your LOG_LEVEL_DEF to a different variable/function than ddLogLevel:
+ * Define your MSLOG_LEVEL_DEF to a different variable/function than ddLogLevel:
  *
- * // #undef LOG_LEVEL_DEF // Undefine first only if needed
- * #define LOG_LEVEL_DEF myLibLogLevel
+ * // #undef MSLOG_LEVEL_DEF // Undefine first only if needed
+ * #define MSLOG_LEVEL_DEF myLibLogLevel
  *
  * Define your logging level in your implementation file:
  *
@@ -51,7 +51,7 @@
  * Step 3:
  * Replace your NSLog statements with DDLog statements according to the severity of the message.
  *
- * NSLog(@"Fatal error, no dohickey found!"); -> DDLogError(@"Fatal error, no dohickey found!");
+ * NSLog(@"Fatal error, no dohickey found!"); -> MSDDLogError(@"Fatal error, no dohickey found!");
  *
  * DDLog works exactly the same as NSLog.
  * This means you can pass it multiple variables just like NSLog.
@@ -74,30 +74,30 @@ FOUNDATION_EXPORT const unsigned char CocoaLumberjackVersionString[];
 #import <CocoaLumberjack/MSDDLog.h>
 
 // Main macros
-#import <CocoaLumberjack/DDLogMacros.h>
-#import <CocoaLumberjack/DDAssertMacros.h>
+#import <CocoaLumberjack/MSDDLogMacros.h>
+#import <CocoaLumberjack/MSDDAssertMacros.h>
 
 // Capture ASL
-#import <CocoaLumberjack/DDASLLogCapture.h>
+#import <CocoaLumberjack/MSDDASLLogCapture.h>
 
 // Loggers
-#import <CocoaLumberjack/DDLoggerNames.h>
+#import <CocoaLumberjack/MSDDLoggerNames.h>
 
-#import <CocoaLumberjack/DDTTYLogger.h>
-#import <CocoaLumberjack/DDASLLogger.h>
-#import <CocoaLumberjack/DDFileLogger.h>
-#import <CocoaLumberjack/DDOSLogger.h>
+#import <CocoaLumberjack/MSDDTTYLogger.h>
+#import <CocoaLumberjack/MSDDASLLogger.h>
+#import <CocoaLumberjack/MSDDFileLogger.h>
+#import <CocoaLumberjack/MSDDOSLogger.h>
 
 // Extensions
-#import <CocoaLumberjack/DDContextFilterLogFormatter.h>
-#import <CocoaLumberjack/DDDispatchQueueLogFormatter.h>
-#import <CocoaLumberjack/DDMultiFormatter.h>
-#import <CocoaLumberjack/DDFileLogger+Buffering.h>
+#import <CocoaLumberjack/MSDDContextFilterLogFormatter.h>
+#import <CocoaLumberjack/MSDDDispatchQueueLogFormatter.h>
+#import <CocoaLumberjack/MSDDMultiFormatter.h>
+#import <CocoaLumberjack/MSDDFileLogger+Buffering.h>
 
 // CLI
 #import <CocoaLumberjack/MSCLIColor.h>
 
 // etc
-#import <CocoaLumberjack/DDAbstractDatabaseLogger.h>
+#import <CocoaLumberjack/MSDDAbstractDatabaseLogger.h>
 #import <CocoaLumberjack/MSDDLog+LOGV.h>
-#import <CocoaLumberjack/DDLegacyMacros.h>
+#import <CocoaLumberjack/MSDDLegacyMacros.h>

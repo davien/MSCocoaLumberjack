@@ -28,21 +28,21 @@ NS_ASSUME_NONNULL_BEGIN
  * This class provides a logger for the Apple os_log facility.
  **/
 API_AVAILABLE(macos(10.12), ios(10.0), watchos(3.0), tvos(10.0))
-@interface DDOSLogger : MSDDAbstractLogger <MSDDLogger>
+@interface MSDDOSLogger : MSDDAbstractLogger <MSDDLogger>
 
 /**
  *  Singleton method
  *
  *  @return the shared instance with OS_LOG_DEFAULT.
  */
-@property (nonatomic, class, readonly, strong) DDOSLogger *sharedInstance;
+@property (nonatomic, class, readonly, strong) MSDDOSLogger *sharedInstance;
 
 /**
  Designated initializer
  
  @param subsystem Desired subsystem in log. E.g. "org.example"
  @param category Desired category in log. E.g. "Point of interests."
- @return New instance of DDOSLogger.
+ @return New instance of MSDDOSLogger.
  
  @discussion This method requires either both or no parameter to be set. Much like `(String, String)?` in Swift.
  If both parameters are nil, this method will return a logger configured with `OS_LOG_DEFAULT`.

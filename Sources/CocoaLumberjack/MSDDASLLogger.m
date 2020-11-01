@@ -21,17 +21,17 @@
 
 #import <asl.h>
 
-#import <CocoaLumberjack/DDASLLogger.h>
+#import <CocoaLumberjack/MSDDASLLogger.h>
 
-const char* const kDDASLKeyDDLog = "MSDDLog";
-const char* const kDDASLDDLogValue = "1";
+const char* const kMSDDASLKeyDDLog = "MSDDLog";
+const char* const kMSDDASLDDLogValue = "1";
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"
-static DDASLLogger *sharedInstance;
+static MSDDASLLogger *sharedInstance;
 #pragma clang diagnostic pop
 
-@interface DDASLLogger () {
+@interface MSDDASLLogger () {
     aslclient _client;
 }
 
@@ -40,7 +40,7 @@ static DDASLLogger *sharedInstance;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
-@implementation DDASLLogger
+@implementation MSDDASLLogger
 #pragma clang diagnostic pop
 
 + (instancetype)sharedInstance {
@@ -68,13 +68,13 @@ static DDASLLogger *sharedInstance;
     return self;
 }
 
-- (DDLoggerName)loggerName {
-    return DDLoggerNameASL;
+- (MSDDLoggerName)loggerName {
+    return MSDDLoggerNameASL;
 }
 
 - (void)logMessage:(MSDDLogMessage *)logMessage {
     // Skip captured log messages
-    if ([logMessage->_fileName isEqualToString:@"DDASLLogCapture"]) {
+    if ([logMessage->_fileName isEqualToString:@"MSDDASLLogCapture"]) {
         return;
     }
 
@@ -117,7 +117,7 @@ static DDASLLogger *sharedInstance;
             if (asl_set(m, ASL_KEY_LEVEL, level_strings[aslLogLevel]) == 0 &&
                 asl_set(m, ASL_KEY_MSG, msg) == 0 &&
                 asl_set(m, ASL_KEY_READ_UID, readUIDString) == 0 &&
-                asl_set(m, kDDASLKeyDDLog, kDDASLDDLogValue) == 0) {
+                asl_set(m, kMSDDASLKeyDDLog, kMSDDASLDDLogValue) == 0) {
                 asl_send(_client, m);
             }
             asl_free(m);
