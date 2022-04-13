@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -23,3 +23,9 @@
             NSAssert(NO, @"%@", description);                                         \
         }
 #define MSDDAssertCondition(condition) MSDDAssert(condition, @"Condition not satisfied: %s", #condition)
+
+/**
+ * Analog to `DDAssertionFailure` from DDAssert.swift for use in Objective C
+ */
+#define MSDDAssertionFailure(frmt, ...) MSDDAssert(NO, frmt, ##__VA_ARGS__)
+

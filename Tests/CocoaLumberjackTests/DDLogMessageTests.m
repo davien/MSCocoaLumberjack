@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -65,6 +65,19 @@ static NSString * const kDefaultMessage = @"Log message";
                                             line:__LINE__
                                              tag:NULL
                                          options:options
+                                       timestamp:nil];
+}
+
++ (DDLogMessage *)test_messageWithWithoutFunction {
+    return [[DDLogMessage alloc] initWithMessage:kDefaultMessage
+                                           level:DDLogLevelDebug
+                                            flag:DDLogFlagError
+                                         context:1
+                                            file:@(__FILE__)
+                                        function:nil
+                                            line:__LINE__
+                                             tag:NULL
+                                         options:(DDLogMessageOptions)0
                                        timestamp:nil];
 }
 
@@ -236,6 +249,15 @@ static NSString * const kDefaultMessage = @"Log message";
     XCTAssertEqualObjects(self.message.threadName, copy.threadName);
     XCTAssertEqualObjects(self.message.queueLabel, copy.queueLabel);
     XCTAssertEqual(self.message.qos, copy.qos);
+    XCTAssertEqual(self.message.hash, copy.hash);
+    XCTAssertEqualObjects(self.message, copy);
+}
+
+- (void)testEqualityCopyWithoutFunction {
+    __auto_type message = [DDLogMessage test_messageWithWithoutFunction];
+    __auto_type copy = (typeof(message))[message copy];
+    XCTAssertEqual(message.hash, copy.hash);
+    XCTAssertEqualObjects(message, copy);
 }
 
 @end

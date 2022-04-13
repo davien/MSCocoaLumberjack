@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -625,7 +625,7 @@ FOUNDATION_EXTERN NSString * __nullable MSDDExtractFileNameWithoutExtension(cons
  * For example, a database logger may only save occasionally as the disk IO is slow.
  * In such loggers, this method should be implemented to flush any pending IO.
  *
- * This allows invocations of DDLog's flushLog method to be propogated to loggers that need it.
+ * This allows invocations of DDLog's flushLog method to be propagated to loggers that need it.
  *
  * Note that DDLog's flushLog method is invoked automatically when the application quits,
  * and it may be also invoked manually by the developer prior to application crashes, or other such reasons.
@@ -782,6 +782,9 @@ typedef NS_OPTIONS(NSInteger, MSDDLogMessageOptions){
     NSString *_fileName;
     NSString *_function;
     NSUInteger _line;
+    #if DD_LEGACY_MESSAGE_TAG
+    id _tag __attribute__((deprecated("Use _representedObject instead", "_representedObject")));;
+    #endif
     id _representedObject;
     MSDDLogMessageOptions _options;
     NSDate * _timestamp;

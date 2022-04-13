@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -208,6 +208,31 @@ static const DDLogLevel ddLogLevel = DDLogLevelAll;
 #endif
 }
 
+- (void)testMaximumNumberOfLogFiles {
+    logger.doNotReuseLogFiles = YES;
+    logger.logFileManager.maximumNumberOfLogFiles = 4;
+    logger.maximumFileSize = 10;
+    [DDLog addLogger:logger];
+    DDLogError(@"Log 1 in the file");
+    DDLogError(@"Log 2 in the file");
+    DDLogError(@"Log 3 in the file");
+    DDLogError(@"Log 4 in the file");
+    
+    /// wait log queue finish.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSArray *oldFileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self->logger.logFileManager.logsDirectory error:nil];
+        XCTAssertEqual(oldFileNames.count, 4);
+        
+        self->logger.logFileManager.maximumNumberOfLogFiles = 2;
+        
+        /// wait delete old files finish.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSArray *newFileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self->logger.logFileManager.logsDirectory error:nil];
+            XCTAssertEqual(newFileNames.count, 2);
+        });
+    });
+}
+
 - (void)testWrapping {
     __auto_type wrapped = [logger wrapWithBuffer];
     XCTAssert([wrapped.class isSubclassOfClass:NSProxy.class]);
@@ -233,9 +258,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelAll;
     DDLogVerbose(@"%@", @"verbose");
 
     [DDLog flushLog];
+    
+    NSString* filePath = logger.currentLogFileInfo.filePath;
+    XCTAssertNotNil(filePath);
 
     NSError *error = nil;
-    NSData *data = [NSData dataWithContentsOfFile:logger.currentLogFileInfo.filePath options:NSDataReadingUncached error:&error];
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingUncached error:&error];
     XCTAssertNil(error);
 
     NSString *contents = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -253,9 +281,12 @@ static const DDLogLevel ddLogLevel = DDLogLevelAll;
     DDLogVerbose(@"%@", @"verbose");
 
     [DDLog flushLog];
+    
+    NSString* filePath = logger.currentLogFileInfo.filePath;
+    XCTAssertNotNil(filePath);
 
     NSError *error = nil;
-    NSData *data = [NSData dataWithContentsOfFile:logger.currentLogFileInfo.filePath options:NSDataReadingUncached error:&error];
+    NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingUncached error:&error];
     XCTAssertNil(error);
 
     NSString *contents = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

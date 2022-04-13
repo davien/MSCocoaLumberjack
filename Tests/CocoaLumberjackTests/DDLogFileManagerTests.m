@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -43,7 +43,7 @@
     __autoreleasing NSError *creationError;
     NSString *filePath = [self.logFileManager createNewLogFileWithError:&creationError];
     XCTAssertNil(creationError);
-    XCTAssertTrue([self.logFileManager isLogFile:[NSURL fileURLWithPath:filePath].lastPathComponent]);
+    XCTAssertTrue([self.logFileManager isLogFile:filePath.lastPathComponent]);
 
     __autoreleasing NSError *error = nil;
     NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingUncached error:&error];

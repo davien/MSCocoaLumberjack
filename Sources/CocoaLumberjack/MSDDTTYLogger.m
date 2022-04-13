@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2020, Deusty, LLC
+// Copyright (c) 2010-2021, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -832,9 +832,11 @@ static MSDDTTYLogger *sharedInstance;
         return nil;
     }
 
+#if !defined(DD_CLI) || __has_include(<AppKit/NSColor.h>)
     if (@available(iOS 10.0, macOS 10.12, tvOS 10.0, watchOS 3.0, *)) {
         NSLogWarn(@"CocoaLumberjack: Warning: Usage of MSDDTTYLogger detected when MSDDOSLogger is available and can be used! Please consider migrating to MSDDOSLogger.");
     }
+#endif
 
     if ((self = [super init])) {
         // Initialize 'app' variable (char *)
@@ -1283,12 +1285,14 @@ static MSDDTTYLogger *sharedInstance;
             // The technique below is faster than using NSDateFormatter.
             if (logMessage->_timestamp) {
                 NSTimeInterval epoch = [logMessage->_timestamp timeIntervalSince1970];
+                double integral;
+                double fract = modf(epoch, &integral);
                 struct tm tm;
-                time_t time = (time_t)epoch;
+                time_t time = (time_t)integral;
                 (void)localtime_r(&time, &tm);
-                int milliseconds = (int)((epoch - floor(epoch)) * 1000.0);
+                long milliseconds = (long)(fract * 1000.0);
 
-                len = snprintf(ts, 24, "%04d-%02d-%02d %02d:%02d:%02d:%03d", // yyyy-MM-dd HH:mm:ss:SSS
+                len = snprintf(ts, 24, "%04d-%02d-%02d %02d:%02d:%02d:%03ld", // yyyy-MM-dd HH:mm:ss:SSS
                                tm.tm_year + 1900,
                                tm.tm_mon + 1,
                                tm.tm_mday,
